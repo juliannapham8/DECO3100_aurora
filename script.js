@@ -180,7 +180,7 @@ const COLORS = {
   purpleSoft: 'rgba(139,92,246,0.5)',
   blue:       '#3b82f6',
   blueSoft:   'rgba(59,130,246,0.5)',
-  cream:      'rgba(245,234,214,0.85)',
+  cream:      'rgba(255, 251, 244, 0.85)',
   muted:      'rgba(138,112,85,0.8)',
   grid:       'rgba(232,184,75,0.08)',
 };
@@ -707,3 +707,143 @@ makeChart('banProjectionChart', {
     }
   }
 });
+
+/* ══════════════════════════════════════════════════
+   META SHARE BARS
+══════════════════════════════════════════════════ */
+const META = [
+  { label: 'Orange (Aurora)', pct: 38, color: '#c96e24' },
+  { label: 'Teal Control',    pct: 18, color: '#357e7e' },
+  { label: 'Purple Combo',    pct: 16, color: '#604898' },
+  { label: 'Gold Midrange',   pct: 14, color: '#c9a84c' },
+  { label: 'Orange (Aggro)',  pct: 9,  color: '#a04f18' },
+  { label: 'Other',           pct: 5,  color: '#3a3040' },
+];
+
+const mbEl = document.getElementById('meta-bars');
+META.forEach(d => {
+  const row = document.createElement('div');
+  row.className = 'wr-row';
+  row.innerHTML = `
+    <div class="wr-label"><strong>${d.label}</strong><span>${d.pct}%</span></div>
+    <div class="wr-track"><div class="wr-fill" style="background:${d.color}" data-pct="${d.pct}"></div></div>
+  `;
+  mbEl.appendChild(row);
+});
+
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting)
+      e.target.querySelectorAll('.wr-fill').forEach(b => b.style.width = b.dataset.pct + '%');
+  });
+}, { threshold: 0.3 }).observe(document.getElementById('meta-bars'));
+
+
+// --------------------
+// META SHARE TOGGLE LINE CHART
+// --------------------
+const metaShareLabels = Array.from({ length: 19 }, (_, i) => `#${i + 1}`);
+const metaShareReal   = [8, 8, 8, 7, 5, 5, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2];
+const metaShareDummy  = [45, 25, 15, 3, 2, 2, 1, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
+const metaShareFlat   = Array(19).fill(parseFloat((100 / 19).toFixed(2)));
+
+const BASE_COLORS_META = ['#f97316', '#c2441a', '#e8b84b'];
+
+const SCALES_META = {
+  real:  { min: 0,  max: 12 },
+  dummy: { min: 0,  max: 50 },
+  flat:  { min: 4,  max: 8  },
+};
+
+function hexToRgbaMeta(hex, alpha) {
+  const clean = hex.startsWith('#') ? hex.slice(1, 7) : null;
+  if (!clean || clean.length !== 6) return hex;
+  const r = parseInt(clean.slice(0, 2), 16);
+  const g = parseInt(clean.slice(2, 4), 16);
+  const b = parseInt(clean.slice(4, 6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+makeChart('metaShareChart', {
+  type: 'line',
+  data: {
+    labels: metaShareLabels,
+    datasets: [
+      {
+        label: 'Unleashed Meta (current)',
+        data: metaShareReal,
+        borderColor: '#f97316',
+        backgroundColor: 'rgba(249,115,22,0.08)',
+        pointBackgroundColor: '#f97316',
+        pointRadius: 4, pointHoverRadius: 6,
+        tension: 0.35, fill: true, borderWidth: 2,
+      },
+      {
+        label: 'Spiritforged Meta',
+        data: metaShareDummy,
+        borderColor: '#c2441a',
+        backgroundColor: 'rgba(194,68,26,0.08)',
+        pointBackgroundColor: '#c2441a',
+        pointRadius: 4, pointHoverRadius: 6,
+        tension: 0.35, fill: true, borderWidth: 2,
+      },
+      {
+        label: 'Ideal Meta Rate',
+        data: metaShareFlat,
+        borderColor: '#e8b84b',
+        backgroundColor: 'transparent',
+        pointRadius: 0, tension: 0,
+        borderDash: [5, 5], borderWidth: 1.5,
+      },
+    ],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    animation: { duration: 600, easing: 'easeInOutQuart' },
+    plugins: {
+      legend: { display: false },
+      tooltip: { ...tooltipDefaults, callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw}%` } },
+    },
+    scales: {
+      x: { ...axisDefaults, title: { display: true, text: 'Legend rank', color: COLORS.muted, font: { size: 12 } } },
+      y: { ...axisDefaults, min: 0, max: 12, title: { display: true, text: 'Meta share %', color: COLORS.muted, font: { size: 12 } }, ticks: { ...axisDefaults.ticks, callback: v => v + '%' } },
+    },
+  },
+});
+
+function applyMetaMode(mode) {
+  const chartEl = document.getElementById('metaShareChart');
+  if (!chartEl) return;
+  const instance = Chart.getChart(chartEl);
+  if (!instance) return;
+
+  const scale = SCALES_META[mode];
+  const activeIdx = { real: 0, dummy: 1, flat: 2 }[mode];
+
+  instance.options.scales.y.min = scale.min;
+  instance.options.scales.y.max = scale.max;
+
+  instance.data.datasets.forEach((ds, i) => {
+    const isActive = i === activeIdx;
+    const base = BASE_COLORS_META[i];
+    const alpha = isActive ? 1 : 0.15;
+    ds.borderColor         = hexToRgbaMeta(base, alpha);
+    ds.pointBackgroundColor = hexToRgbaMeta(base, alpha);
+    ds.borderWidth         = isActive ? 2.5 : 1;
+    ds.pointRadius         = isActive && i !== 2 ? 5 : (i !== 2 ? 2 : 0);
+  });
+
+  instance.update();
+
+  document.querySelectorAll('.meta-tog-btn').forEach(btn => {
+    const isActive = btn.dataset.mode === mode;
+    btn.classList.toggle('active', isActive);
+    btn.classList.toggle('inactive', !isActive);
+  });
+}
+
+document.querySelectorAll('.meta-tog-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyMetaMode(btn.dataset.mode));
+});
+
+applyMetaMode('real');

@@ -11,103 +11,121 @@
 <body>
 
 <!-- HERO -->
-<section class="hero">
+<!-- <section class="hero">
   <div class="hero-orb"></div>
   <p class="hero-eyebrow">A Meta Report - Regional Qualifier Sydney Statistics</p>
   <h1 class="hero-title">The Rise of<br>Dazzling Aurora</h1>
   <p class="hero-subtitle">How One Card Broke the Unleashed Meta</p>
   <p class="hero-desc">A data-driven investigation on how the Dazzling Aurora and Elder Dragon combination changed the Unleashed Meta</p>
   <div class="scroll-hint">Scroll</div>
+</section> -->
+
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-bg-img"></div>
+  <p class="hero-eyebrow">A Meta Report - Regional Qualifier Sydney Statistics</p>
+  <h1 class="hero-title">The Rise of<br>Dazzling Aurora</h1>
+  <p class="hero-subtitle">How One Card Broke the Unleashed Meta</p>
+  <p class="hero-desc">A data-driven investigation on how the Dazzling Aurora and Elder Dragon combination changed the Unleashed Meta</p>
+  <div class="scroll-hint">Scroll</div>
+  <div class="hero-splash-fade"></div>
 </section>
 
 <div class="divider reveal"><hr class="divider-line"><span class="divider-ornament">✦</span></div>
 
 <!-- CHAPTER 01 -->
 <section class="section">
-  <div class="section-label reveal">Riftbound: Spiritforged</div>
+
+  <div class="section-label reveal">Summary</div>
   <h2 class="reveal">Riftbound <em class="tooltip" data-tip="The most effective tactics, strategies, and characters currently available for winning a match.">Meta</em></h2>
   <p class="reveal">The Riftbound meta is constantly evolving, and shaped by new set releases, balance shifts, and player experimentation. 
     As powerful cards and archetypes emerge, players adapt their deck choices to either take advantage of dominant strategies or counter them. 
     Understanding these shifts is key to analysing why some archetypes remain relevant 
     while others fade from prominence.</p>
+
+    <div class="reveal" style="position: relative; width: 100%; max-width: 700px; margin: 24px auto; margin-top:50px; margin-bottom: 100px;">
+      <img src="https://cardgamer.com/wp-content/uploads/2026/03/riftbound-unleashed-card-list-1024x576.jpg" alt="Riftbound meta"
+        style="width: 100%; display: block; border-radius: 8px; border: 1px solid rgba(232, 184, 75, 0.2);">
+      <div style="
+        position: absolute;
+        inset: 0;
+        background: 
+          linear-gradient(to right,  var(--dark) 0%, transparent 18%, transparent 82%, var(--dark) 100%),
+          linear-gradient(to bottom, var(--dark) 0%, transparent 18%, transparent 82%, var(--dark) 100%);
+        pointer-events: none;
+        border-radius: 8px;
+      "></div>
+    </div>
+
+  <!-- NewSection  -->
+<div class="section-label reveal" style="text-align: center; justify-content: center;">A Comparative Analysis</div>
+<h2 class="reveal" style="text-align: center;">A balanced Meta Share</h2>
+  <!-- <p class="'reveal"style="text-align:center;">Over the past 2 Set's, Riftbound has found its footing in Meta Balancing. As we can see a more even distribution
+    in UNLEASED in comparison to the staggered SPIRITFORGED line.
+  </p> -->
+  <p class="reveal" style="
+  text-align: center;
+  font-size: 20px;
+  font-style: italic;
+  color: rgba(245, 234, 214, 0.7);
+  max-width: 620px;
+  margin: 0 auto 28px auto;
+  line-height: 1.8;
+  margin-bottom: 50px;
+">
+  Over the past 2 sets, Riftbound has found its footing in meta balancing — a more even distribution 
+  in <em style="color: #f97316; font-style: normal;">Unleashed</em> compared to the staggered 
+  <em style="color: #e8b84b; font-style: normal;">Spiritforged</em> Meta.
+</p>
+
+
+  <!-- Chart 1  -->
+  <div class="chart-block reveal">
+    <div class="chart-title-row">
+      <span class="chart-meta">Click to focus and rescale</span>
+    </div>
   
-  <p class="paragraph-subtitle">The Balanced Meta of Spiriforged</p>
-
-  <p class="reveal">By the end of Spiritforged, the meta had finally found its footing. Following a series of targeted 
-    updates and card bans, legend diversity was at an all-time high, where no single deck dominated, and players were genuinely 
-    rewarded for mastering their chosen legend. The long-standing Draven problem had been put to rest, with the archetype 
-    no longer able to steamroll tournaments the way it once had. This shift was on full display at the Atlanta Regional 
-    Qualifier, where the field was notably more varied; though a handful of Draven pilots still made their presence felt. </p>
-
-  <p class="paragraph-subtitle">Top 8 Decks at <em>RQ Atlanta</em></p>
-
-  <div class="stat-grid">
-    <div class="stat-card reveal reveal-delay-1">
-      <span class="stat-number">1st</span>
-      <img src="https://static.dotgg.gg/riftbound/cards/OGS-017.webp" alt="Annie" 
-        style="width: auto; height: 150px; object-fit: contain; display: block; margin: 0 auto 12px auto; border: 1px solid rgba(232, 184, 75, 0.4);">
-      <span class="stat-label">Annie</span>
-      <p class="stat-sub">Prismaticism</p>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+      <button class="meta-tog-btn active" data-mode="real" style="border-color:#f97316; color:#f97316;">
+        <span class="meta-btn-swatch" style="background:#f97316;"></span>UNLEASHED Meta Share (current)
+      </button>
+      <button class="meta-tog-btn" data-mode="dummy" style="border-color:#c2441a; color:#c2441a;">
+        <span class="meta-btn-swatch" style="background:#c2441a;"></span>SPIRITFORGED Meta Share
+      </button>
+      <button class="meta-tog-btn" data-mode="flat" style="border-color:#e8b84b; color:#e8b84b;">
+        <span class="meta-btn-swatch dashed" style="color:#e8b84b;"></span>Ideal Meta Share
+      </button>
     </div>
-    <div class="stat-card reveal reveal-delay-1">
-      <span class="stat-number">2nd</span>
-      <img src="https://static.dotgg.gg/riftbound/cards/SFD-185.webp" alt="Draven" 
-        style="width: auto; height: 150px; object-fit: contain; display: block; margin: 0 auto 12px auto; border: 1px solid rgba(232, 184, 75, 0.4);">
-      <span class="stat-label">Draven</span>
-      <p class="stat-sub">CTCG Koko Lopez</p>
-    </div>
-    <div class="stat-card reveal reveal-delay-3">
-      <span class="stat-number">3rd</span>
-      <img src="https://static.dotgg.gg/riftbound/cards/SFD-195.webp" alt="Irelia" 
-        style="width: auto; height: 150px; object-fit: contain; display: block; margin: 0 auto 12px auto; border: 1px solid rgba(232, 184, 75, 0.4);">
-      <span class="stat-label">Irelia</span>
-      <p class="stat-sub">HaruKaze</p>
-    </div>
-    <div class="stat-card reveal reveal-delay-3">
-      <span class="stat-number">4th</span>
-      <img src="https://preview.redd.it/ezreal-legend-ability-interaction-v0-y6s0235cd1ig1.jpg?width=716&format=pjpg&auto=webp&s=2758e216922166dabf91a81527d63a49f35b7ec4" alt="Ezreal" 
-        style="width: auto; height: 150px; object-fit: contain; display: block; margin: 0 auto 12px auto; border: 1px solid rgba(232, 184, 75, 0.4);">
-      <span class="stat-label">Ezreal</span>
-      <p class="stat-sub">CTG Alanzq</p>
-    </div>
-    <div class="stat-card reveal reveal-delay-3">
-      <span class="stat-number">5th</span>
-      <img src="https://cardbot.com.au/cdn/shop/files/653045_400w_5b452a9e-4fbc-493f-bb45-b418aae410d5.jpg?v=1762749139" alt="Kaisa" 
-        style="width: auto; height: 150px; object-fit: contain; display: block; margin: 0 auto 12px auto; border: 1px solid rgba(232, 184, 75, 0.4);">
-      <span class="stat-label">Kai'sa</span>
-      <p class="stat-sub">Frosty</p>
-    </div>
-    <div class="stat-card reveal reveal-delay-3">
-      <span class="stat-number">6th</span>
-      <img src="https://static.dotgg.gg/riftbound/cards/SFD-185.webp" alt="Draven" 
-        style="width: auto; height: 150px; object-fit: contain; display: block; margin: 0 auto 12px auto; border: 1px solid rgba(232, 184, 75, 0.4);">
-      <span class="stat-label">Draven</span>
-      <p class="stat-sub">Boulevard</p>
-    </div>
-    <div class="stat-card reveal reveal-delay-3">
-      <span class="stat-number">7th</span>
-      <img src="https://static.dotgg.gg/riftbound/cards/OGN-269.webp" alt="Sett" 
-        style="width: auto; height: 150px; object-fit: contain; display: block; margin: 0 auto 12px auto; border: 1px solid rgba(232, 184, 75, 0.4);">
-      <span class="stat-label">Sett, The Boss</span>
-      <p class="stat-sub">CTCG Collin K</p>
-    </div>
-    <div class="stat-card reveal reveal-delay-3">
-      <span class="stat-number">8th</span>
-      <img src="https://static.dotgg.gg/riftbound/cards/SFD-185.webp" alt="Draven" 
-        style="width: auto; height: 150px; object-fit: contain; display: block; margin: 0 auto 12px auto; border: 1px solid rgba(232, 184, 75, 0.4);">
-      <span class="stat-label">Draven</span>
-      <p class="stat-sub">StarDust</p>
-    </div>
+  
+    <div class="chart-wrap"><canvas id="metaShareChart"></canvas></div>
   </div>
 
+  <!-- <div class="section-label reveal">Current Meta</div>
+<h2 class="reveal">A balanced Meta Share</h2> -->
+
+<!-- <div class="reveal" style="display: flex; gap: 2rem; align-items: flex-start; margin-top: 24px;"> -->
+
+</div>
+
+</section>
+
+<div class="divider reveal"><hr class="divider-line"><span class="divider-ornament">✦</span></div>
+
+<section>
+
+
   <!-- CHART: Win Rate by Rune -->
-  <div class="chart-block reveal">
+  <!-- <div class="chart-block reveal">
     <div class="chart-title-row">
       <h3>Win Rate by Rune Pairing</h3>
       <span class="chart-meta">Match win % across all Swiss rounds</span>
     </div>
     <div class="chart-wrap chart-wrap-tall"><canvas id="winRateChart"></canvas></div>
-  </div>
+  </div> -->
+
+
+
+
 
   <p class="paragraph-subtitle">Deck in Focus: <em>Dazzling Aurora</em></p>
 
@@ -266,6 +284,24 @@
     </div>
     <div class="chart-wrap"><canvas id="legendAbilityChart"></canvas></div>
   </div>
+
+  <!-- chart of body decks -->
+  <div class="story-block reveal">
+    <div class="story-text">
+      <p class="section-tag">Riftbound: Unleashed</p>
+      <h2 class="section-heading">An Even Meta Spread</h2>
+      <p class="section-body">By the start of the new Riftbound set, <em>Unleashed</em>, the meta had finally found its footing. Following a series of targeted 
+    updates and card bans, legend diversity was at an all-time high, where no single deck dominated, and players were genuinely 
+    rewarded for mastering their chosen legend.</p>
+      <br>
+    </div>
+    <div class="stat-visual reveal rd2">
+      <div class="big-stat">38%</div>
+      <div class="big-stat-label">Orange Deck Meta Share</div>
+      <div class="wr-list" id="meta-bars"></div>
+    </div>
+  </div> 
+  
 
   <!-- CHART: Radar
   <div class="chart-block reveal">
