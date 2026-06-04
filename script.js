@@ -802,7 +802,7 @@ Promise.all([
   const metaShareDummy  = top15Spiritforged.map(d => parseFloat(d['Meta Share %']));
   const metaShareFlat   = Array(15).fill(3);
 
-  const BASE_COLORS_META = ['#17b5ff', '#c2441a', '#e8b84b'];
+  const BASE_COLORS_META = ['#f97316', '#c2441a', '#e8b84b'];
 
   const SCALES_META = {
     real:  { min: 0, max: 20 },
@@ -826,7 +826,7 @@ Promise.all([
       labels: metaShareLabels,
       datasets: [
         {
-          label: 'Unleashed Meta (current)',
+          label: 'Unleashed Meta (current)',  // index 0
           data: metaShareReal,
           borderColor: '#f97316',
           backgroundColor: 'rgba(249,115,22,0.08)',
@@ -835,7 +835,7 @@ Promise.all([
           tension: 0.35, fill: true, borderWidth: 2,
         },
         {
-          label: 'Spiritforged Meta',
+          label: 'Spiritforged Meta',          // index 1
           data: metaShareDummy,
           borderColor: '#c2441a',
           backgroundColor: 'rgba(194,68,26,0.08)',
@@ -844,7 +844,7 @@ Promise.all([
           tension: 0.35, fill: true, borderWidth: 2,
         },
         {
-          label: 'Ideal Meta Rate',
+          label: 'Ideal Meta Rate',            // index 2
           data: metaShareFlat,
           borderColor: '#e8b84b',
           backgroundColor: 'transparent',
@@ -862,7 +862,7 @@ Promise.all([
       },
       scales: {
         x: { ...axisDefaults, title: { display: true, text: 'Legend', color: COLORS.muted, font: { size: 12 } }, ticks: { ...axisDefaults.ticks, maxRotation: 40, font: { size: 8 } } },
-        y: { ...axisDefaults, min: 0, max: 20, title: { display: true, text: 'Meta share %', color: COLORS.muted, font: { size: 12 } }, ticks: { ...axisDefaults.ticks, callback: v => v + '%' } },
+        y: { ...axisDefaults, min: 0, max: 20, title: { display: true, text: 'Meta share %', color: COLORS.muted, font: { size: 16 } }, ticks: { ...axisDefaults.ticks, callback: v => v + '%' } },
       },
     },
   });
@@ -885,23 +885,22 @@ Promise.all([
     instance.options.scales.y.min = scale.min;
     instance.options.scales.y.max = scale.max;
 
-
     instance.data.datasets.forEach((ds, i) => {
-      const isIdeal = i === 2;
-      const isActive = isIdeal || mode === 'all' || i === activeIdx;
+      const isFlat = i === 2;
+      const isActive = isFlat || mode === 'all' || i === activeIdx;
       const base = BASE_COLORS_META[i];
       const alpha = isActive ? 1 : 0.15;
-      ds.borderColor = hexToRgbaMeta(base, alpha);
+      ds.borderColor          = hexToRgbaMeta(base, alpha);
       ds.pointBackgroundColor = hexToRgbaMeta(base, alpha);
-      ds.borderWidth = isActive ? 2.5 : 1;
-      ds.pointRadius = isIdeal ? 0 : (isActive ? 5 : 2);
+      ds.borderWidth          = isActive ? 2.5 : 1;
+      ds.pointRadius          = isFlat ? 0 : (isActive ? 5 : 2);
     });
 
     instance.update();
 
     document.querySelectorAll('.meta-tog-btn').forEach(btn => {
       const isActive = btn.dataset.mode === mode;
-      btn.classList.toggle('active', isActive);
+      btn.classList.toggle('active',   isActive);
       btn.classList.toggle('inactive', !isActive);
     });
   }
@@ -910,163 +909,150 @@ Promise.all([
     btn.addEventListener('click', () => applyMetaMode(btn.dataset.mode));
   });
 
-  applyMetaMode('real');
+  applyMetaMode('flat');
 });
-
 
 // // --------------------
 // // TOURNAMENT MAP
 // // --------------------
 
-
 // --------------------
 // ARCH MAPS
 // --------------------
 const MAP_ARCH_LABEL = {
-  cc:'calm/chaos', bc:'body/calm',  co:'calm/order', cm:'calm/mind',
-  bch:'body/chaos', chm:'chaos/mind', mo:'mind/order', bf:'body/fury',
-  cf:'chaos/fury',  fm:'fury/mind',   bo:'body/order',
+  calmchaos:  'calm/chaos',
+  calmorder:  'calm/order',
+  calmmind:   'calm/mind',
+  bodycalm:   'body/calm',
+  bodychaos:  'body/chaos',
+  bodyorder:  'body/order',
+  chaosmind:  'chaos/mind',
+  chaosfury:  'chaos/fury',
+  furymind:   'fury/mind',
+  mindorder:  'mind/order',
 };
+
 const MAP_ARCH_PILL = {
-  cc:'map-pill-cc',   bc:'map-pill-bc',   co:'map-pill-co',  cm:'map-pill-cm',
-  bch:'map-pill-bch', chm:'map-pill-chm', mo:'map-pill-mo',  bf:'map-pill-bf',
-  cf:'map-pill-cf',   fm:'map-pill-fm',   bo:'map-pill-bo',
+  calmchaos:  'map-pill-cc',
+  calmorder:  'map-pill-co',
+  calmmind:   'map-pill-cm',
+  bodycalm:   'map-pill-bc',
+  bodychaos:  'map-pill-bch',
+  bodyorder:  'map-pill-bo',
+  chaosmind:  'map-pill-chm',
+  chaosfury:  'map-pill-cf',
+  furymind:   'map-pill-fm',
+  mindorder:  'map-pill-mo',
 };
-const TRAIT_TO_ARCH = {
-  calmchaos:'cc',  bodycalm:'bc',   calmorder:'co',  calmmind:'cm',
-  bodychaos:'bch', chaosmind:'chm', mindorder:'mo',  bodyfury:'bf',
-  chaosfury:'cf',  furymind:'fm',   bodyorder:'bo',
-};
-
-function traitToArch(trait) {
-  return TRAIT_TO_ARCH[(trait || '').toLowerCase().trim()] || (trait || '').toLowerCase().trim();
-}
-function rankToNumber(str) {
-  const n = parseInt((str || '').replace(/\D/g, ''), 10);
-  return isNaN(n) ? 99 : n;
-}
 
 // --------------------
-// CSV → standings parser
-// Handles two schemas:
-//   Schema A (sydney/vancouver): Place, Record, Champion, Title, Player, Team, Trait, Earnings, Top4%
-//   Schema B (atlanta):          Placement, Record, Legend, Player, Archetype, Deck Price, Win Rate
-// --------------------
-function parseStandingsRows(rows) {
-  if (!rows.length) return [];
-  const headers = Object.keys(rows[0]).map(k => k.toLowerCase().trim());
-  const has = k => headers.includes(k);
-
-  return rows.map(d => {
-    if (has('champion') && has('trait')) {
-      return {
-        rank:   rankToNumber(d.Place),
-        player: d.Player,
-        legend: d.Title ? `${d.Champion}, ${d.Title}` : d.Champion,
-        arch:   traitToArch(d.Trait),
-        rec:    d.Record,
-      };
-    }
-    if (has('legend') && has('archetype')) {
-      const raw = d.Legend || '';
-      const i   = raw.indexOf(' ');
-      const legend = i > -1 ? raw.slice(0, i) + ', ' + raw.slice(i + 1) : raw;
-      return {
-        rank:   rankToNumber(d.Placement),
-        player: d.Player,
-        legend,
-        arch:   traitToArch(d.Archetype),
-        rec:    d.Record,
-      };
-    }
-    return null;
-  }).filter(Boolean);
-}
-
-// --------------------
-// Load every tournament's CSV from the standings/ folder.
-// File naming: standings/sydney_standings.csv, standings/atlanta_standings.csv, etc.
-// If a CSV isn't found, the hardcoded fallback standings stay untouched.
+// STANDINGS LOADER
 // --------------------
 async function loadAllStandings(tournaments) {
   await Promise.all(tournaments.map(async t => {
     try {
-      const rows   = await d3.csv(`standings/${t.id}_standings.csv`);
-      const parsed = parseStandingsRows(rows);
-      if (parsed.length) t.standings = parsed;
+      const rows = await d3.csv(`standings/${t.id}_standings.csv`);
+      if (!rows.length) return;
+      t.standings = rows.map((r, i) => {
+        const legendRaw = r.Legend || r.Champion || '';
+        const legendId  = legendRaw
+          ? legendRaw.split(',')[0].trim().toLowerCase().replace(/\s+/g, '').replace(/'/g, '')
+          : 'placeholder';
+        return {
+          rank:     parseInt((r.Rank || r.Place || r.Placement || '').replace(/\D/g, '')) || (i + 1),
+          player:   r.Player  || '',
+          legend:   legendRaw,
+          legendId: legendId,
+          arch:     (r.Archetype || r.Trait || '').toLowerCase().trim(),
+          rec:      r.Record  || '',
+          price:    r.Price   || '',
+        };
+      });
     } catch (e) {
-      // no CSV for this tournament yet — keep hardcoded fallback
+      t.standings = [];
     }
   }));
 }
 
 // --------------------
-// TOURNAMENT MAP
+// TOURNAMENT LIST
 // --------------------
 const MAP_TOURNAMENTS = [
   {
     id:'sydney', region:'oceania',
     name:'RQ Sydney', city:'Sydney', country:'Australia', date:'March 2026', field:1243,
     lat:-33.87, lon:151.21,
-    standings:[] // loaded from standings/sydney_standings.csv
+    standings:[]
   },
   {
     id:'atlanta', region:'na',
     name:'RQ Atlanta', city:'Atlanta', country:'USA', date:'April 2026', field:1876,
     lat:33.75, lon:-84.39,
-    standings:[] // loaded from standings/atlanta_standings.csv
+    standings:[]
   },
   {
     id:'vancouver', region:'na',
     name:'RQ Vancouver', city:'Vancouver', country:'Canada', date:'May 2026', field:1102,
     lat:49.25, lon:-123.12,
-    standings:[] // loaded from standings/vancouver_standings.csv
+    standings:[]
   },
   {
-    id:'london', region:'eu',
-    name:'RQ London', city:'London', country:'UK', date:'March 2026', field:1420,
-    lat:51.51, lon:-0.13,
-    standings:[] // loaded from standings/london_standings.csv
+    id:'lille', region:'eu',
+    name:'RQ Lille', city:'Lille', country:'France', date:'June 2026', field:0,
+    lat:50.63, lon:3.06,
+    standings:[]
   },
   {
-    id:'berlin', region:'eu',
-    name:'RQ Berlin', city:'Berlin', country:'Germany', date:'May 2026', field:998,
-    lat:52.52, lon:13.41,
-    standings:[] // loaded from standings/berlin_standings.csv
-  }
+    id:'houston', region:'na',
+    name:'RQ Houston', city:'Houston', country:'USA', date:'June 2026', field:0,
+    lat:29.76, lon:-95.37,
+    standings:[]
+  },
+  {
+    id:'bologna', region:'eu',
+    name:'RQ Bologna', city:'Bologna', country:'Italy', date:'June 2026', field:0,
+    lat:44.49, lon:11.34,
+    standings:[]
+  },
+  {
+    id:'lasvegas', region:'na',
+    name:'RQ Las Vegas', city:'Las Vegas', country:'USA', date:'June 2026', field:0,
+    lat:36.17, lon:-115.14,
+    standings:[]
+  },
 ];
 
+// --------------------
+// REGION CONFIGS
+// --------------------
 const MAP_REGION_CONFIGS = {
   oceania: {
     desc: '1 tournament · Australia & NZ',
     center: [148, -33], scale: 2200,
     cities: [
-      {name:'Sydney',     lat:-33.87, lon:151.21, anchor:'start',  dx:7,  dy:3},
-      {name:'Melbourne',  lat:-37.81, lon:144.96, anchor:'end',    dx:-7, dy:3},
-      {name:'Brisbane',   lat:-27.47, lon:153.02, anchor:'start',  dx:7,  dy:3},
-      {name:'Canberra',   lat:-35.28, lon:149.13, anchor:'start',  dx:7,  dy:3},
-      {name:'Adelaide',   lat:-34.93, lon:138.60, anchor:'end',    dx:-7, dy:3},
-      {name:'Gold Coast', lat:-28.00, lon:153.43, anchor:'start',  dx:7,  dy:3},
-      {name:'Newcastle',  lat:-32.93, lon:151.78, anchor:'start',  dx:7,  dy:3},
-      {name:'Auckland',   lat:-36.86, lon:174.76, anchor:'start',  dx:7,  dy:3},
+      {name:'Melbourne',  lat:-37.81, lon:144.96, anchor:'end',   dx:-7, dy:3},
+      {name:'Brisbane',   lat:-27.47, lon:153.02, anchor:'start', dx:7,  dy:3},
+      {name:'Canberra',   lat:-35.28, lon:149.13, anchor:'start', dx:7,  dy:3},
+      {name:'Adelaide',   lat:-34.93, lon:138.60, anchor:'end',   dx:-7, dy:3},
+      {name:'Gold Coast', lat:-28.00, lon:153.43, anchor:'start', dx:7,  dy:3},
+      {name:'Newcastle',  lat:-32.93, lon:151.78, anchor:'start', dx:7,  dy:3},
+      {name:'Auckland',   lat:-36.86, lon:174.76, anchor:'start', dx:7,  dy:3},
     ]
   },
   na: {
-    desc: '2 tournaments',
+    desc: '4 tournaments',
     center: [-96, 47], scale: 480,
     cities: [
-      {name:'Vancouver',   lat:49.25,  lon:-123.12, anchor:'end',   dx:-7, dy:3},
       {name:'Seattle',     lat:47.61,  lon:-122.33, anchor:'end',   dx:-7, dy:3},
       {name:'Los Angeles', lat:34.05,  lon:-118.24, anchor:'end',   dx:-7, dy:3},
       {name:'Chicago',     lat:41.88,  lon:-87.63,  anchor:'start', dx:7,  dy:3},
-      {name:'Atlanta',     lat:33.75,  lon:-84.39,  anchor:'start', dx:7,  dy:3},
       {name:'New York',    lat:40.71,  lon:-74.01,  anchor:'start', dx:7,  dy:3},
       {name:'Toronto',     lat:43.65,  lon:-79.38,  anchor:'start', dx:7,  dy:3},
       {name:'Miami',       lat:25.77,  lon:-80.19,  anchor:'start', dx:7,  dy:3},
     ]
   },
   eu: {
-    desc: '2 tournaments',
+    desc: '4 tournaments',
     center: [13, 51], scale: 1050,
     cities: [
       {name:'London',    lat:51.51, lon:-0.13,  anchor:'end',   dx:-7, dy:3},
@@ -1084,13 +1070,24 @@ const MAP_REGION_CONFIGS = {
 // --------------------
 // HELPERS
 // --------------------
-function mapRankClass(r){ if(r===1)return'map-rk-1'; if(r===2)return'map-rk-2'; if(r===3)return'map-rk-3'; if(r<=8)return'map-rk-t8'; return'map-rk-r'; }
-function mapRankLabel(r){ if(r===1)return'1st'; if(r===2)return'2nd'; if(r===3)return'3rd'; return'#'+r; }
+function mapRankClass(r) {
+  if (r === 1) return 'map-rk-1';
+  if (r === 2) return 'map-rk-2';
+  if (r === 3) return 'map-rk-3';
+  if (r <= 8)  return 'map-rk-t8';
+  return 'map-rk-r';
+}
+function mapRankLabel(r) {
+  if (r === 1) return '1st';
+  if (r === 2) return '2nd';
+  if (r === 3) return '3rd';
+  return '#' + r;
+}
 
 let mapActiveId = null;
 
 // --------------------
-// RENDER
+// RENDER REGION
 // --------------------
 function mapRenderRegion(regionKey) {
   const cfg = MAP_REGION_CONFIGS[regionKey];
@@ -1111,7 +1108,7 @@ function mapRenderRegion(regionKey) {
 
   d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
     const countries = topojson.feature(world, world.objects.countries);
-    const borders   = topojson.mesh(world, world.objects.countries, (a,b)=>a!==b);
+    const borders   = topojson.mesh(world, world.objects.countries, (a,b) => a !== b);
 
     g.append('path').datum({type:'Sphere'}).attr('d',path).attr('fill','#0b1020');
 
@@ -1124,6 +1121,7 @@ function mapRenderRegion(regionKey) {
     g.append('path').datum(borders).attr('d',path)
       .attr('fill','none').attr('stroke','rgba(232,184,75,0.12)').attr('stroke-width','0.4');
 
+    // static city dots
     cfg.cities.forEach(c => {
       const pos = proj([c.lon, c.lat]);
       if (!pos) return;
@@ -1140,6 +1138,7 @@ function mapRenderRegion(regionKey) {
       }
     });
 
+    // tournament markers
     MAP_TOURNAMENTS.filter(t => t.region === regionKey).forEach(t => {
       const pos = proj([t.lon, t.lat]);
       if (!pos) return;
@@ -1150,10 +1149,8 @@ function mapRenderRegion(regionKey) {
 
       mg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',13)
         .attr('class','map-ring map-pulse').attr('stroke','#f97316');
-
       mg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',6.5)
         .attr('class','map-dot').attr('fill','#f97316');
-
       mg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',2.5)
         .attr('fill','#ffd700');
 
@@ -1162,7 +1159,6 @@ function mapRenderRegion(regionKey) {
         .attr('fill','#f97316').attr('font-size','10').attr('font-weight','700')
         .attr('font-family','Space Mono, monospace').attr('letter-spacing','0.05em')
         .attr('text-anchor','end').attr('pointer-events','none').text(t.name);
-
       mg.append('text').attr('x',lx).attr('y',cy + 4)
         .attr('fill','rgba(245,234,214,0.6)').attr('font-size','8.5')
         .attr('font-family','Space Mono, monospace').attr('letter-spacing','0.04em')
@@ -1171,11 +1167,15 @@ function mapRenderRegion(regionKey) {
   });
 }
 
+// --------------------
+// SELECT TOURNAMENT
+// --------------------
 function mapSelectTournament(id) {
   if (mapActiveId) d3.select('#map-m-'+mapActiveId).classed('active', false);
   mapActiveId = id;
   d3.select('#map-m-'+id).classed('active', true);
   const t = MAP_TOURNAMENTS.find(x => x.id === id);
+
   document.getElementById('map-sidebar').innerHTML = `
     <div id="map-t-header">
       <div id="map-t-eyebrow">Regional Qualifier · ${t.country}</div>
@@ -1183,19 +1183,31 @@ function mapSelectTournament(id) {
       <div id="map-t-meta">${t.date}<br>${t.city}, ${t.country}<br>Field: ${t.field.toLocaleString()} players</div>
     </div>
     <div id="map-standings">
-      ${t.standings.map(s => `
+      ${t.standings.length === 0
+        ? `<div style="padding:24px;text-align:center;font-family:'Space Mono',monospace;font-size:11px;color:#8a7055;letter-spacing:0.1em;text-transform:uppercase;">No standings yet</div>`
+        : t.standings.map(s => `
         <div class="map-s-row">
           <div class="map-s-rank ${mapRankClass(s.rank)}">${mapRankLabel(s.rank)}</div>
-          <div class="map-s-info">
-            <div class="map-s-player">${s.player}</div>
-            <div class="map-s-legend">${s.legend}</div>
+          <div class="map-s-portrait">
+            <img src="legends/${s.legendId || 'placeholder'}.webp"
+                 onerror="this.src='legends/placeholder.webp'"
+                 alt="${s.legend}">
           </div>
-          <span class="map-pill ${MAP_ARCH_PILL[s.arch] || 'map-pill-cc'}">${MAP_ARCH_LABEL[s.arch] || s.arch}</span>
-          <div class="map-s-rec">${s.rec}</div>
+          <div class="map-s-info">
+            <div class="map-s-player">${s.legend}</div>
+            <div class="map-s-bottom">
+              <span class="map-pill ${MAP_ARCH_PILL[s.arch] || 'map-pill-cc'}">${MAP_ARCH_LABEL[s.arch] || s.arch}</span>
+            </div>
+            <div class="map-s-legend">by ${s.player}</div>
+            <div class="map-s-rec">${s.rec}</div>
+          </div>
         </div>`).join('')}
     </div>`;
 }
 
+// --------------------
+// SHOW EMPTY
+// --------------------
 function mapShowEmpty(msg) {
   document.getElementById('map-sidebar').innerHTML = `
     <div id="map-sidebar-empty">
@@ -1205,7 +1217,7 @@ function mapShowEmpty(msg) {
 }
 
 // --------------------
-// INIT — fetch all CSVs first, then start the map
+// INIT
 // --------------------
 loadAllStandings(MAP_TOURNAMENTS).then(() => {
   document.getElementById('region-select').addEventListener('change', function() {

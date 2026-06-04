@@ -1462,15 +1462,16 @@ section {
 }
 
 /* ─── TOURNAMENT MAP ─── */
+/* ─── TOURNAMENT MAP ─── */
 #map-sidebar {
-  width: 265px;
+  width: 350px;
   flex-shrink: 0;
   background: rgba(18,10,32,0.98);
   border-left: 1px solid rgba(232,184,75,0.18);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  max-height: 560px;
+  max-height: 650px;
 }
 
 #map-sidebar-empty {
@@ -1484,7 +1485,7 @@ section {
 }
 
 #map-sidebar-empty p {
-  font-size: 10px;
+  font-size: 13px;
   letter-spacing: 0.13em;
   color: var(--muted);
   text-transform: uppercase;
@@ -1502,7 +1503,7 @@ section {
 
 #map-t-eyebrow {
   font-family: 'Space Mono', monospace;
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--orange);
@@ -1511,26 +1512,26 @@ section {
 
 #map-t-name {
   font-family: 'Cinzel Decorative', serif;
-  font-size: 14px;
+  font-size: 33px;
   color: var(--gold);
   line-height: 1.3;
 }
 
 #map-t-meta {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 16px;
   color: var(--muted);
   margin-top: 3px;
-  line-height: 1.7;
+  line-height: 1.1;
 }
 
 #map-standings { overflow-y: auto; flex: 1; }
-
 .map-s-row {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
+  gap: 12px;
+  padding: 10px 14px;
   border-bottom: 1px solid rgba(232,184,75,0.05);
   transition: background 0.15s;
 }
@@ -1539,56 +1540,83 @@ section {
 
 .map-s-rank {
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 700;
-  width: 26px;
+  width: 32px;
   flex-shrink: 0;
   text-align: center;
 }
 
-.map-rk-1  { color: #ffd700; }
-.map-rk-2  { color: #c0c0c0; }
-.map-rk-3  { color: #cd7f32; }
-.map-rk-t8 { color: var(--gold); }
-.map-rk-r  { color: var(--muted); }
+.map-s-portrait {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(232,184,75,0.25);
+  background: rgba(21,13,39,0.8);
+}
 
-.map-s-info { flex: 1; min-width: 0; }
+.map-s-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.map-s-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
 
 .map-s-player {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: var(--cream);
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 14px;
+  color: var(--gold);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.map-s-bottom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .map-s-legend {
-  font-size: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
   color: var(--muted);
-  margin-top: 1px;
 }
 
 .map-s-rec {
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
+  font-size: 13px;
   color: var(--orange);
-  flex-shrink: 0;
 }
 
 .map-pill {
   font-family: 'Space Mono', monospace;
-  font-size: 8px;
-  padding: 2px 5px;
+  font-size: 11px;
+  padding: 2px 8px;
   border: 1px solid;
   flex-shrink: 0;
   white-space: nowrap;
+  width: fit-content;
 }
 
-.map-pill-cc { background: rgba(249,115,22,0.13); color: #fb923c; border-color: rgba(249,115,22,0.28); }
-.map-pill-bc { background: rgba(34,197,94,0.09);  color: #86efac; border-color: rgba(34,197,94,0.18);  }
-.map-pill-co { background: rgba(59,130,246,0.09); color: #93c5fd; border-color: rgba(59,130,246,0.18); }
-.map-pill-cm { background: rgba(139,92,246,0.1);  color: #c4b5fd; border-color: rgba(139,92,246,0.18); }
+.map-pill-cc  { background: rgba(249,115,22,0.13); color: #fb923c; border-color: rgba(249,115,22,0.28); }
+.map-pill-bc  { background: rgba(34,197,94,0.09);  color: #86efac; border-color: rgba(34,197,94,0.18);  }
+.map-pill-co  { background: rgba(59,130,246,0.09); color: #93c5fd; border-color: rgba(59,130,246,0.18); }
+.map-pill-cm  { background: rgba(139,92,246,0.1);  color: #c4b5fd; border-color: rgba(139,92,246,0.18); }
+.map-pill-bch { background: rgba(220,38,38,0.1);   color: #fca5a5; border-color: rgba(220,38,38,0.2);   }
+.map-pill-cf  { background: rgba(234,88,12,0.1);   color: #fdba74; border-color: rgba(234,88,12,0.2);   }
+.map-pill-fm  { background: rgba(168,85,247,0.1);  color: #d8b4fe; border-color: rgba(168,85,247,0.2);  }
+.map-pill-mo  { background: rgba(20,184,166,0.1);  color: #5eead4; border-color: rgba(20,184,166,0.2);  }
 
 .map-t-marker { cursor: pointer; }
 .map-t-marker .map-dot { transition: fill 0.15s; }
