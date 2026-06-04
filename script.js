@@ -311,41 +311,89 @@ makeChart('winRateChart', {
 //   }
 // });
 
-new Chart(document.getElementById('demandChart'), {
-  type: 'line',
-  data: {
-    labels: ['Round 1', 'Round 2', 'Round 3', 'Round 4', 'Round 5', 'Round 6', 'Round 7', 'Round 8 (Top Cut)'],
-    datasets: [
+// --------------------
+// DEMAND CHART
+// --------------------
+d3.csv('dazzling_aurora_prices.csv').then(data => {
+
+  const allRows   = data.slice(0, 13);
+  const allLabels = allRows.map(d => d['Date Range'].split(' to ')[0]);
+  const allPrices = allRows.map(d => parseFloat(d['Foil Market Price (USD)'].replace('$', '')));
+
+  const SPIKE_IDX = 5;
+
+  const beforePrices = allPrices.map((v, i) => i <= SPIKE_IDX ? v : null);
+  const afterPrices  = allPrices.map((v, i) => i >= SPIKE_IDX ? v : null);
+
+  const demandEl = document.getElementById('demandChart');
+  if (!demandEl) return;
+
+  let demandPeriod = 'after';
+  let demandChart  = null;
+
+  function buildDemandChart(period) {
+    if (demandChart) demandChart.destroy();
+
+    const datasets = [
       {
-        label: 'After Unleashed',
-        data: [0.68, 1.41, 2.18, 2.92, 3.69, 4.51, 5.24, 6.0],
-        borderColor: COLORS.orange,
-        backgroundColor: COLORS.orangeDim,
-        pointBackgroundColor: COLORS.orange,
-        pointRadius: 5, tension: 0.35, fill: true,
+        label: 'Before Unleashed Preview',
+        data: beforePrices,
+        borderColor: 'rgba(232,184,75,0.4)',
+        backgroundColor: 'rgba(232,184,75,0.03)',
+        pointBackgroundColor: allPrices.map((_, i) => i <= SPIKE_IDX ? 'rgba(232,184,75,0.4)' : 'transparent'),
+        pointRadius: allPrices.map((_, i) => i <= SPIKE_IDX ? 4 : 0),
+        tension: 0.35, fill: true, borderWidth: 1.5,
+        borderDash: [4, 3],
+        spanGaps: false,
       },
       {
-        label: 'Before Unleashed',
-        data: [0.61, 1.22, 1.83, 2.44, 3.05, 3.66, 4.24, 4.8],
-        borderColor: COLORS.gold,
-        backgroundColor: COLORS.goldDim,
-        pointBackgroundColor: COLORS.gold,
-        pointRadius: 5, tension: 0.35, fill: true,
-        borderDash: [4, 3],
-      }
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      tooltip: tooltipDefaults,
-      legend: { labels: { color: COLORS.cream, font: { size: 11 }, padding: 16, boxWidth: 14 } }
-    },
-    scales: {
-      x: { ...axisDefaults },
-      y: { ...axisDefaults, title: { display: true, text: 'Price', color: COLORS.muted } }
-    }
+        label: 'After Unleashed Preview',
+        data: period === 'before' ? afterPrices.map(() => null) : afterPrices,
+        borderColor: COLORS.orange,
+        backgroundColor: 'rgba(249,115,22,0.25)',
+        pointBackgroundColor: allPrices.map((_, i) => i >= SPIKE_IDX ? COLORS.orange : 'transparent'),
+        pointRadius: allPrices.map((_, i) => i >= SPIKE_IDX ? 5 : 0),
+        pointHoverRadius: 8,
+        tension: 0.35, fill: true, borderWidth: 3,
+        spanGaps: false,
+      },
+    ];
+
+    demandChart = new Chart(demandEl, {
+      type: 'line',
+      data: { labels: allLabels, datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        animation: { duration: 400 },
+        plugins: {
+          legend: { display: false },
+          tooltip: tooltipDefaults,
+        },
+        scales: {
+          x: { ...axisDefaults },
+          y: {
+            ...axisDefaults,
+            min: 0, max: 120,
+            title: { display: true, text: 'Market Price (USD)', color: COLORS.muted },
+            ticks: { ...axisDefaults.ticks, callback: v => '$' + v },
+          },
+        },
+      },
+    });
   }
+
+  document.querySelectorAll('.demand-tog-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      demandPeriod = btn.dataset.period;
+      buildDemandChart(demandPeriod);
+      document.querySelectorAll('.demand-tog-btn').forEach(b => {
+        b.classList.toggle('active',   b.dataset.period === demandPeriod);
+        b.classList.toggle('inactive', b.dataset.period !== demandPeriod);
+      });
+    });
+  });
+
+  buildDemandChart('after');
 });
 
 // --------------------
@@ -738,112 +786,437 @@ new IntersectionObserver(entries => {
   });
 }, { threshold: 0.3 }).observe(document.getElementById('meta-bars'));
 
-
 // --------------------
 // META SHARE TOGGLE LINE CHART
 // --------------------
-const metaShareLabels = Array.from({ length: 19 }, (_, i) => `#${i + 1}`);
-const metaShareReal   = [8, 8, 8, 7, 5, 5, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2];
-const metaShareDummy  = [45, 25, 15, 3, 2, 2, 1, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
-const metaShareFlat   = Array(19).fill(parseFloat((100 / 19).toFixed(2)));
+Promise.all([
+  d3.csv('unleashed_meta_share.csv'),
+  d3.csv('meta_share.csv')
+]).then(([unleashedData, spiritforgedData]) => {
 
-const BASE_COLORS_META = ['#f97316', '#c2441a', '#e8b84b'];
+  const top15Unleashed    = unleashedData.slice(0, 15);
+  const top15Spiritforged = spiritforgedData.slice(0, 15);
 
-const SCALES_META = {
-  real:  { min: 0,  max: 12 },
-  dummy: { min: 0,  max: 50 },
-  flat:  { min: 4,  max: 8  },
-};
+  const metaShareLabels = top15Unleashed.map(d => d['Legend']);
+  const metaShareReal   = top15Unleashed.map(d => parseFloat(d['Meta Share %']));
+  const metaShareDummy  = top15Spiritforged.map(d => parseFloat(d['Meta Share %']));
+  const metaShareFlat   = Array(15).fill(3);
 
-function hexToRgbaMeta(hex, alpha) {
-  const clean = hex.startsWith('#') ? hex.slice(1, 7) : null;
-  if (!clean || clean.length !== 6) return hex;
-  const r = parseInt(clean.slice(0, 2), 16);
-  const g = parseInt(clean.slice(2, 4), 16);
-  const b = parseInt(clean.slice(4, 6), 16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
+  const BASE_COLORS_META = ['#17b5ff', '#c2441a', '#e8b84b'];
 
-makeChart('metaShareChart', {
-  type: 'line',
-  data: {
-    labels: metaShareLabels,
-    datasets: [
-      {
-        label: 'Unleashed Meta (current)',
-        data: metaShareReal,
-        borderColor: '#f97316',
-        backgroundColor: 'rgba(249,115,22,0.08)',
-        pointBackgroundColor: '#f97316',
-        pointRadius: 4, pointHoverRadius: 6,
-        tension: 0.35, fill: true, borderWidth: 2,
-      },
-      {
-        label: 'Spiritforged Meta',
-        data: metaShareDummy,
-        borderColor: '#c2441a',
-        backgroundColor: 'rgba(194,68,26,0.08)',
-        pointBackgroundColor: '#c2441a',
-        pointRadius: 4, pointHoverRadius: 6,
-        tension: 0.35, fill: true, borderWidth: 2,
-      },
-      {
-        label: 'Ideal Meta Rate',
-        data: metaShareFlat,
-        borderColor: '#e8b84b',
-        backgroundColor: 'transparent',
-        pointRadius: 0, tension: 0,
-        borderDash: [5, 5], borderWidth: 1.5,
-      },
-    ],
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    animation: { duration: 600, easing: 'easeInOutQuart' },
-    plugins: {
-      legend: { display: false },
-      tooltip: { ...tooltipDefaults, callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw}%` } },
+  const SCALES_META = {
+    real:  { min: 0, max: 20 },
+    dummy: { min: 0, max: 20 },
+    flat:  { min: 0, max: 20 },
+    all:   { min: 0, max: 20 },
+  };
+
+  function hexToRgbaMeta(hex, alpha) {
+    const clean = hex.startsWith('#') ? hex.slice(1, 7) : null;
+    if (!clean || clean.length !== 6) return hex;
+    const r = parseInt(clean.slice(0, 2), 16);
+    const g = parseInt(clean.slice(2, 4), 16);
+    const b = parseInt(clean.slice(4, 6), 16);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  makeChart('metaShareChart', {
+    type: 'line',
+    data: {
+      labels: metaShareLabels,
+      datasets: [
+        {
+          label: 'Unleashed Meta (current)',
+          data: metaShareReal,
+          borderColor: '#f97316',
+          backgroundColor: 'rgba(249,115,22,0.08)',
+          pointBackgroundColor: '#f97316',
+          pointRadius: 4, pointHoverRadius: 6,
+          tension: 0.35, fill: true, borderWidth: 2,
+        },
+        {
+          label: 'Spiritforged Meta',
+          data: metaShareDummy,
+          borderColor: '#c2441a',
+          backgroundColor: 'rgba(194,68,26,0.08)',
+          pointBackgroundColor: '#c2441a',
+          pointRadius: 4, pointHoverRadius: 6,
+          tension: 0.35, fill: true, borderWidth: 2,
+        },
+        {
+          label: 'Ideal Meta Rate',
+          data: metaShareFlat,
+          borderColor: '#e8b84b',
+          backgroundColor: 'transparent',
+          pointRadius: 0, tension: 0,
+          borderDash: [5, 5], borderWidth: 1.5,
+        },
+      ],
     },
-    scales: {
-      x: { ...axisDefaults, title: { display: true, text: 'Legend rank', color: COLORS.muted, font: { size: 12 } } },
-      y: { ...axisDefaults, min: 0, max: 12, title: { display: true, text: 'Meta share %', color: COLORS.muted, font: { size: 12 } }, ticks: { ...axisDefaults.ticks, callback: v => v + '%' } },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 600, easing: 'easeInOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: { ...tooltipDefaults, callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw}%` } },
+      },
+      scales: {
+        x: { ...axisDefaults, title: { display: true, text: 'Legend', color: COLORS.muted, font: { size: 12 } }, ticks: { ...axisDefaults.ticks, maxRotation: 40, font: { size: 8 } } },
+        y: { ...axisDefaults, min: 0, max: 20, title: { display: true, text: 'Meta share %', color: COLORS.muted, font: { size: 12 } }, ticks: { ...axisDefaults.ticks, callback: v => v + '%' } },
+      },
     },
-  },
-});
-
-function applyMetaMode(mode) {
-  const chartEl = document.getElementById('metaShareChart');
-  if (!chartEl) return;
-  const instance = Chart.getChart(chartEl);
-  if (!instance) return;
-
-  const scale = SCALES_META[mode];
-  const activeIdx = { real: 0, dummy: 1, flat: 2 }[mode];
-
-  instance.options.scales.y.min = scale.min;
-  instance.options.scales.y.max = scale.max;
-
-  instance.data.datasets.forEach((ds, i) => {
-    const isActive = i === activeIdx;
-    const base = BASE_COLORS_META[i];
-    const alpha = isActive ? 1 : 0.15;
-    ds.borderColor         = hexToRgbaMeta(base, alpha);
-    ds.pointBackgroundColor = hexToRgbaMeta(base, alpha);
-    ds.borderWidth         = isActive ? 2.5 : 1;
-    ds.pointRadius         = isActive && i !== 2 ? 5 : (i !== 2 ? 2 : 0);
   });
 
-  instance.update();
+  function applyMetaMode(mode) {
+    const chartEl = document.getElementById('metaShareChart');
+    if (!chartEl) return;
+    const instance = Chart.getChart(chartEl);
+    if (!instance) return;
+
+    const scale = SCALES_META[mode];
+    const activeIdx = { real: 0, dummy: 1, flat: 2, all: -1 }[mode];
+
+    if (mode === 'dummy') {
+      instance.data.labels = top15Spiritforged.map(d => d['Legend']);
+    } else {
+      instance.data.labels = top15Unleashed.map(d => d['Legend']);
+    }
+
+    instance.options.scales.y.min = scale.min;
+    instance.options.scales.y.max = scale.max;
+
+
+    instance.data.datasets.forEach((ds, i) => {
+      const isIdeal = i === 2;
+      const isActive = isIdeal || mode === 'all' || i === activeIdx;
+      const base = BASE_COLORS_META[i];
+      const alpha = isActive ? 1 : 0.15;
+      ds.borderColor = hexToRgbaMeta(base, alpha);
+      ds.pointBackgroundColor = hexToRgbaMeta(base, alpha);
+      ds.borderWidth = isActive ? 2.5 : 1;
+      ds.pointRadius = isIdeal ? 0 : (isActive ? 5 : 2);
+    });
+
+    instance.update();
+
+    document.querySelectorAll('.meta-tog-btn').forEach(btn => {
+      const isActive = btn.dataset.mode === mode;
+      btn.classList.toggle('active', isActive);
+      btn.classList.toggle('inactive', !isActive);
+    });
+  }
 
   document.querySelectorAll('.meta-tog-btn').forEach(btn => {
-    const isActive = btn.dataset.mode === mode;
-    btn.classList.toggle('active', isActive);
-    btn.classList.toggle('inactive', !isActive);
+    btn.addEventListener('click', () => applyMetaMode(btn.dataset.mode));
+  });
+
+  applyMetaMode('real');
+});
+
+
+// // --------------------
+// // TOURNAMENT MAP
+// // --------------------
+
+
+// --------------------
+// ARCH MAPS
+// --------------------
+const MAP_ARCH_LABEL = {
+  cc:'calm/chaos', bc:'body/calm',  co:'calm/order', cm:'calm/mind',
+  bch:'body/chaos', chm:'chaos/mind', mo:'mind/order', bf:'body/fury',
+  cf:'chaos/fury',  fm:'fury/mind',   bo:'body/order',
+};
+const MAP_ARCH_PILL = {
+  cc:'map-pill-cc',   bc:'map-pill-bc',   co:'map-pill-co',  cm:'map-pill-cm',
+  bch:'map-pill-bch', chm:'map-pill-chm', mo:'map-pill-mo',  bf:'map-pill-bf',
+  cf:'map-pill-cf',   fm:'map-pill-fm',   bo:'map-pill-bo',
+};
+const TRAIT_TO_ARCH = {
+  calmchaos:'cc',  bodycalm:'bc',   calmorder:'co',  calmmind:'cm',
+  bodychaos:'bch', chaosmind:'chm', mindorder:'mo',  bodyfury:'bf',
+  chaosfury:'cf',  furymind:'fm',   bodyorder:'bo',
+};
+
+function traitToArch(trait) {
+  return TRAIT_TO_ARCH[(trait || '').toLowerCase().trim()] || (trait || '').toLowerCase().trim();
+}
+function rankToNumber(str) {
+  const n = parseInt((str || '').replace(/\D/g, ''), 10);
+  return isNaN(n) ? 99 : n;
+}
+
+// --------------------
+// CSV → standings parser
+// Handles two schemas:
+//   Schema A (sydney/vancouver): Place, Record, Champion, Title, Player, Team, Trait, Earnings, Top4%
+//   Schema B (atlanta):          Placement, Record, Legend, Player, Archetype, Deck Price, Win Rate
+// --------------------
+function parseStandingsRows(rows) {
+  if (!rows.length) return [];
+  const headers = Object.keys(rows[0]).map(k => k.toLowerCase().trim());
+  const has = k => headers.includes(k);
+
+  return rows.map(d => {
+    if (has('champion') && has('trait')) {
+      return {
+        rank:   rankToNumber(d.Place),
+        player: d.Player,
+        legend: d.Title ? `${d.Champion}, ${d.Title}` : d.Champion,
+        arch:   traitToArch(d.Trait),
+        rec:    d.Record,
+      };
+    }
+    if (has('legend') && has('archetype')) {
+      const raw = d.Legend || '';
+      const i   = raw.indexOf(' ');
+      const legend = i > -1 ? raw.slice(0, i) + ', ' + raw.slice(i + 1) : raw;
+      return {
+        rank:   rankToNumber(d.Placement),
+        player: d.Player,
+        legend,
+        arch:   traitToArch(d.Archetype),
+        rec:    d.Record,
+      };
+    }
+    return null;
+  }).filter(Boolean);
+}
+
+// --------------------
+// Load every tournament's CSV from the standings/ folder.
+// File naming: standings/sydney_standings.csv, standings/atlanta_standings.csv, etc.
+// If a CSV isn't found, the hardcoded fallback standings stay untouched.
+// --------------------
+async function loadAllStandings(tournaments) {
+  await Promise.all(tournaments.map(async t => {
+    try {
+      const rows   = await d3.csv(`standings/${t.id}_standings.csv`);
+      const parsed = parseStandingsRows(rows);
+      if (parsed.length) t.standings = parsed;
+    } catch (e) {
+      // no CSV for this tournament yet — keep hardcoded fallback
+    }
+  }));
+}
+
+// --------------------
+// TOURNAMENT MAP
+// --------------------
+const MAP_TOURNAMENTS = [
+  {
+    id:'sydney', region:'oceania',
+    name:'RQ Sydney', city:'Sydney', country:'Australia', date:'March 2026', field:1243,
+    lat:-33.87, lon:151.21,
+    standings:[] // loaded from standings/sydney_standings.csv
+  },
+  {
+    id:'atlanta', region:'na',
+    name:'RQ Atlanta', city:'Atlanta', country:'USA', date:'April 2026', field:1876,
+    lat:33.75, lon:-84.39,
+    standings:[] // loaded from standings/atlanta_standings.csv
+  },
+  {
+    id:'vancouver', region:'na',
+    name:'RQ Vancouver', city:'Vancouver', country:'Canada', date:'May 2026', field:1102,
+    lat:49.25, lon:-123.12,
+    standings:[] // loaded from standings/vancouver_standings.csv
+  },
+  {
+    id:'london', region:'eu',
+    name:'RQ London', city:'London', country:'UK', date:'March 2026', field:1420,
+    lat:51.51, lon:-0.13,
+    standings:[] // loaded from standings/london_standings.csv
+  },
+  {
+    id:'berlin', region:'eu',
+    name:'RQ Berlin', city:'Berlin', country:'Germany', date:'May 2026', field:998,
+    lat:52.52, lon:13.41,
+    standings:[] // loaded from standings/berlin_standings.csv
+  }
+];
+
+const MAP_REGION_CONFIGS = {
+  oceania: {
+    desc: '1 tournament · Australia & NZ',
+    center: [148, -33], scale: 2200,
+    cities: [
+      {name:'Sydney',     lat:-33.87, lon:151.21, anchor:'start',  dx:7,  dy:3},
+      {name:'Melbourne',  lat:-37.81, lon:144.96, anchor:'end',    dx:-7, dy:3},
+      {name:'Brisbane',   lat:-27.47, lon:153.02, anchor:'start',  dx:7,  dy:3},
+      {name:'Canberra',   lat:-35.28, lon:149.13, anchor:'start',  dx:7,  dy:3},
+      {name:'Adelaide',   lat:-34.93, lon:138.60, anchor:'end',    dx:-7, dy:3},
+      {name:'Gold Coast', lat:-28.00, lon:153.43, anchor:'start',  dx:7,  dy:3},
+      {name:'Newcastle',  lat:-32.93, lon:151.78, anchor:'start',  dx:7,  dy:3},
+      {name:'Auckland',   lat:-36.86, lon:174.76, anchor:'start',  dx:7,  dy:3},
+    ]
+  },
+  na: {
+    desc: '2 tournaments',
+    center: [-96, 47], scale: 480,
+    cities: [
+      {name:'Vancouver',   lat:49.25,  lon:-123.12, anchor:'end',   dx:-7, dy:3},
+      {name:'Seattle',     lat:47.61,  lon:-122.33, anchor:'end',   dx:-7, dy:3},
+      {name:'Los Angeles', lat:34.05,  lon:-118.24, anchor:'end',   dx:-7, dy:3},
+      {name:'Chicago',     lat:41.88,  lon:-87.63,  anchor:'start', dx:7,  dy:3},
+      {name:'Atlanta',     lat:33.75,  lon:-84.39,  anchor:'start', dx:7,  dy:3},
+      {name:'New York',    lat:40.71,  lon:-74.01,  anchor:'start', dx:7,  dy:3},
+      {name:'Toronto',     lat:43.65,  lon:-79.38,  anchor:'start', dx:7,  dy:3},
+      {name:'Miami',       lat:25.77,  lon:-80.19,  anchor:'start', dx:7,  dy:3},
+    ]
+  },
+  eu: {
+    desc: '2 tournaments',
+    center: [13, 51], scale: 1050,
+    cities: [
+      {name:'London',    lat:51.51, lon:-0.13,  anchor:'end',   dx:-7, dy:3},
+      {name:'Berlin',    lat:52.52, lon:13.41,  anchor:'start', dx:7,  dy:3},
+      {name:'Paris',     lat:48.86, lon:2.35,   anchor:'end',   dx:-7, dy:3},
+      {name:'Madrid',    lat:40.42, lon:-3.70,  anchor:'end',   dx:-7, dy:3},
+      {name:'Rome',      lat:41.90, lon:12.50,  anchor:'start', dx:7,  dy:3},
+      {name:'Amsterdam', lat:52.37, lon:4.90,   anchor:'start', dx:7,  dy:3},
+      {name:'Warsaw',    lat:52.23, lon:21.01,  anchor:'start', dx:7,  dy:3},
+      {name:'Stockholm', lat:59.33, lon:18.07,  anchor:'start', dx:7,  dy:3},
+    ]
+  }
+};
+
+// --------------------
+// HELPERS
+// --------------------
+function mapRankClass(r){ if(r===1)return'map-rk-1'; if(r===2)return'map-rk-2'; if(r===3)return'map-rk-3'; if(r<=8)return'map-rk-t8'; return'map-rk-r'; }
+function mapRankLabel(r){ if(r===1)return'1st'; if(r===2)return'2nd'; if(r===3)return'3rd'; return'#'+r; }
+
+let mapActiveId = null;
+
+// --------------------
+// RENDER
+// --------------------
+function mapRenderRegion(regionKey) {
+  const cfg = MAP_REGION_CONFIGS[regionKey];
+  document.getElementById('region-desc').textContent = '· ' + cfg.desc;
+  document.getElementById('no-region').style.display = 'none';
+  const svgEl = document.getElementById('map-svg');
+  svgEl.style.display = 'block';
+  const sel = d3.select('#map-svg');
+  sel.selectAll('*').remove();
+  mapActiveId = null;
+  mapShowEmpty('Click a glowing marker to view standings');
+
+  const proj = d3.geoMercator().center(cfg.center).scale(cfg.scale).translate([350, 280]);
+  const path = d3.geoPath(proj);
+  const g = sel.append('g');
+
+  g.append('rect').attr('x',0).attr('y',0).attr('width',700).attr('height',560).attr('fill','#08050f');
+
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
+    const countries = topojson.feature(world, world.objects.countries);
+    const borders   = topojson.mesh(world, world.objects.countries, (a,b)=>a!==b);
+
+    g.append('path').datum({type:'Sphere'}).attr('d',path).attr('fill','#0b1020');
+
+    g.selectAll('.map-land').data(countries.features).join('path')
+      .attr('class','map-land').attr('d',path)
+      .attr('fill','rgba(232,184,75,0.1)')
+      .attr('stroke','rgba(232,184,75,0.28)')
+      .attr('stroke-width','0.7');
+
+    g.append('path').datum(borders).attr('d',path)
+      .attr('fill','none').attr('stroke','rgba(232,184,75,0.12)').attr('stroke-width','0.4');
+
+    cfg.cities.forEach(c => {
+      const pos = proj([c.lon, c.lat]);
+      if (!pos) return;
+      const [cx, cy] = pos;
+      if (cx < -20 || cx > 720 || cy < -20 || cy > 580) return;
+      const isTourney = MAP_TOURNAMENTS.find(t => t.city === c.name && t.region === regionKey);
+      if (!isTourney) {
+        g.append('circle').attr('cx',cx).attr('cy',cy).attr('r',2.5)
+          .attr('fill','rgba(245,234,214,0.4)');
+        g.append('text').attr('x', cx + c.dx).attr('y', cy + c.dy)
+          .attr('fill','rgba(245,234,214,0.5)').attr('font-size','8')
+          .attr('font-family','Space Mono, monospace').attr('letter-spacing','0.05em')
+          .attr('text-anchor', c.anchor).attr('pointer-events','none').text(c.name);
+      }
+    });
+
+    MAP_TOURNAMENTS.filter(t => t.region === regionKey).forEach(t => {
+      const pos = proj([t.lon, t.lat]);
+      if (!pos) return;
+      const [cx, cy] = pos;
+
+      const mg = g.append('g').attr('class','map-t-marker').attr('id','map-m-'+t.id)
+        .on('click', () => mapSelectTournament(t.id));
+
+      mg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',13)
+        .attr('class','map-ring map-pulse').attr('stroke','#f97316');
+
+      mg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',6.5)
+        .attr('class','map-dot').attr('fill','#f97316');
+
+      mg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',2.5)
+        .attr('fill','#ffd700');
+
+      const lx = cx - 13;
+      mg.append('text').attr('x',lx).attr('y',cy - 10)
+        .attr('fill','#f97316').attr('font-size','10').attr('font-weight','700')
+        .attr('font-family','Space Mono, monospace').attr('letter-spacing','0.05em')
+        .attr('text-anchor','end').attr('pointer-events','none').text(t.name);
+
+      mg.append('text').attr('x',lx).attr('y',cy + 4)
+        .attr('fill','rgba(245,234,214,0.6)').attr('font-size','8.5')
+        .attr('font-family','Space Mono, monospace').attr('letter-spacing','0.04em')
+        .attr('text-anchor','end').attr('pointer-events','none').text(t.city + ', ' + t.country);
+    });
   });
 }
 
-document.querySelectorAll('.meta-tog-btn').forEach(btn => {
-  btn.addEventListener('click', () => applyMetaMode(btn.dataset.mode));
-});
+function mapSelectTournament(id) {
+  if (mapActiveId) d3.select('#map-m-'+mapActiveId).classed('active', false);
+  mapActiveId = id;
+  d3.select('#map-m-'+id).classed('active', true);
+  const t = MAP_TOURNAMENTS.find(x => x.id === id);
+  document.getElementById('map-sidebar').innerHTML = `
+    <div id="map-t-header">
+      <div id="map-t-eyebrow">Regional Qualifier · ${t.country}</div>
+      <div id="map-t-name">${t.name}</div>
+      <div id="map-t-meta">${t.date}<br>${t.city}, ${t.country}<br>Field: ${t.field.toLocaleString()} players</div>
+    </div>
+    <div id="map-standings">
+      ${t.standings.map(s => `
+        <div class="map-s-row">
+          <div class="map-s-rank ${mapRankClass(s.rank)}">${mapRankLabel(s.rank)}</div>
+          <div class="map-s-info">
+            <div class="map-s-player">${s.player}</div>
+            <div class="map-s-legend">${s.legend}</div>
+          </div>
+          <span class="map-pill ${MAP_ARCH_PILL[s.arch] || 'map-pill-cc'}">${MAP_ARCH_LABEL[s.arch] || s.arch}</span>
+          <div class="map-s-rec">${s.rec}</div>
+        </div>`).join('')}
+    </div>`;
+}
 
-applyMetaMode('real');
+function mapShowEmpty(msg) {
+  document.getElementById('map-sidebar').innerHTML = `
+    <div id="map-sidebar-empty">
+      <div style="font-size:28px;color:#f97316;opacity:0.22;">◎</div>
+      <p>${msg}</p>
+    </div>`;
+}
+
+// --------------------
+// INIT — fetch all CSVs first, then start the map
+// --------------------
+loadAllStandings(MAP_TOURNAMENTS).then(() => {
+  document.getElementById('region-select').addEventListener('change', function() {
+    if (!this.value) {
+      d3.select('#map-svg').selectAll('*').remove();
+      document.getElementById('map-svg').style.display = 'none';
+      document.getElementById('no-region').style.display = 'flex';
+      document.getElementById('region-desc').textContent = '';
+      mapShowEmpty('Select a region, then click a tournament marker');
+      return;
+    }
+    mapRenderRegion(this.value);
+  });
+});

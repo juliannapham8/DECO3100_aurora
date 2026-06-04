@@ -1460,3 +1460,145 @@ section {
       currentColor 0 4px,
       transparent 4px 7px);
 }
+
+/* ─── TOURNAMENT MAP ─── */
+#map-sidebar {
+  width: 265px;
+  flex-shrink: 0;
+  background: rgba(18,10,32,0.98);
+  border-left: 1px solid rgba(232,184,75,0.18);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 560px;
+}
+
+#map-sidebar-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 10px;
+  padding: 24px;
+}
+
+#map-sidebar-empty p {
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  color: var(--muted);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.9;
+  font-style: normal;
+}
+
+#map-t-header {
+  padding: 14px 16px 10px;
+  background: rgba(249,115,22,0.09);
+  border-bottom: 1px solid rgba(232,184,75,0.14);
+  flex-shrink: 0;
+}
+
+#map-t-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 4px;
+}
+
+#map-t-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 14px;
+  color: var(--gold);
+  line-height: 1.3;
+}
+
+#map-t-meta {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 3px;
+  line-height: 1.7;
+}
+
+#map-standings { overflow-y: auto; flex: 1; }
+
+.map-s-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-bottom: 1px solid rgba(232,184,75,0.05);
+  transition: background 0.15s;
+}
+
+.map-s-row:hover { background: rgba(249,115,22,0.05); }
+
+.map-s-rank {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  width: 26px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.map-rk-1  { color: #ffd700; }
+.map-rk-2  { color: #c0c0c0; }
+.map-rk-3  { color: #cd7f32; }
+.map-rk-t8 { color: var(--gold); }
+.map-rk-r  { color: var(--muted); }
+
+.map-s-info { flex: 1; min-width: 0; }
+
+.map-s-player {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--cream);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.map-s-legend {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.map-s-rec {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--orange);
+  flex-shrink: 0;
+}
+
+.map-pill {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  padding: 2px 5px;
+  border: 1px solid;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.map-pill-cc { background: rgba(249,115,22,0.13); color: #fb923c; border-color: rgba(249,115,22,0.28); }
+.map-pill-bc { background: rgba(34,197,94,0.09);  color: #86efac; border-color: rgba(34,197,94,0.18);  }
+.map-pill-co { background: rgba(59,130,246,0.09); color: #93c5fd; border-color: rgba(59,130,246,0.18); }
+.map-pill-cm { background: rgba(139,92,246,0.1);  color: #c4b5fd; border-color: rgba(139,92,246,0.18); }
+
+.map-t-marker { cursor: pointer; }
+.map-t-marker .map-dot { transition: fill 0.15s; }
+.map-t-marker:hover .map-dot,
+.map-t-marker.active .map-dot { fill: #ffd700 !important; }
+.map-t-marker .map-ring { fill: none; stroke-width: 1; }
+.map-t-marker.active .map-ring { stroke: #ffd700 !important; }
+
+@keyframes mapPulse {
+  0%, 100% { r: 11; opacity: 0.5; }
+  50%       { r: 17; opacity: 0;   }
+}
+.map-pulse { animation: mapPulse 2.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
