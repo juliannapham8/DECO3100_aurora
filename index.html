@@ -9,18 +9,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 </head>
 <body>
-
-<!-- HERO -->
-<!-- <section class="hero">
-  <div class="hero-orb"></div>
-  <p class="hero-eyebrow">A Meta Report - Regional Qualifier Sydney Statistics</p>
-  <h1 class="hero-title">The Rise of<br>Dazzling Aurora</h1>
-  <p class="hero-subtitle">How One Card Broke the Unleashed Meta</p>
-  <p class="hero-desc">A data-driven investigation on how the Dazzling Aurora and Elder Dragon combination changed the Unleashed Meta</p>
-  <div class="scroll-hint">Scroll</div>
-</section> -->
 
 <section class="hero">
   <div class="hero-orb"></div>
@@ -37,7 +28,6 @@
 
 <!-- CHAPTER 01 -->
 <section class="section">
-
   <div class="section-label reveal">Summary</div>
   <h2 class="reveal">Riftbound <em class="tooltip" data-tip="The most effective tactics, strategies, and characters currently available for winning a match.">Meta</em></h2>
   <p class="reveal">The Riftbound meta is constantly evolving, and shaped by new set releases, balance shifts, and player experimentation. 
@@ -45,74 +35,51 @@
     Understanding these shifts is key to analysing why some archetypes remain relevant 
     while others fade from prominence.</p>
 
-    <div class="reveal" style="position: relative; width: 100%; max-width: 700px; margin: 24px auto; margin-top:50px; margin-bottom: 100px;">
-      <img src="https://cardgamer.com/wp-content/uploads/2026/03/riftbound-unleashed-card-list-1024x576.jpg" alt="Riftbound meta"
-        style="width: 100%; display: block; border-radius: 8px; border: 1px solid rgba(232, 184, 75, 0.2);">
-      <div style="
-        position: absolute;
-        inset: 0;
-        background: 
-          linear-gradient(to right,  var(--dark) 0%, transparent 18%, transparent 82%, var(--dark) 100%),
-          linear-gradient(to bottom, var(--dark) 0%, transparent 18%, transparent 82%, var(--dark) 100%);
-        pointer-events: none;
-        border-radius: 8px;
-      "></div>
-    </div>
+  <div class="reveal" style="position:relative;width:100%;max-width:700px;margin:24px auto;margin-top:50px;margin-bottom:100px;">
+    <img src="https://cardgamer.com/wp-content/uploads/2026/03/riftbound-unleashed-card-list-1024x576.jpg" alt="Riftbound meta"
+      style="width:100%;display:block;border-radius:8px;border:1px solid rgba(232,184,75,0.2);">
+    <div style="
+      position:absolute; inset:0;
+      background:
+        linear-gradient(to right,  var(--dark) 0%, transparent 18%, transparent 82%, var(--dark) 100%),
+        linear-gradient(to bottom, var(--dark) 0%, transparent 18%, transparent 82%, var(--dark) 100%);
+      pointer-events:none; border-radius:8px;
+    "></div>
+  </div>
 
-  <!-- NewSection  -->
-<div class="section-label reveal" style="text-align: center; justify-content: center;">A Comparative Analysis</div>
-<h2 class="reveal" style="text-align: center;">A balanced Meta Share</h2>
-  <!-- <p class="'reveal"style="text-align:center;">Over the past 2 Set's, Riftbound has found its footing in Meta Balancing. As we can see a more even distribution
-    in UNLEASED in comparison to the staggered SPIRITFORGED line.
-  </p> -->
+  <div class="section-label reveal" style="text-align:center;justify-content:center;">A Comparative Analysis</div>
+  <h2 class="reveal" style="text-align:center;">A balanced Meta Share</h2>
   <p class="reveal" style="
-  text-align: center;
-  font-size: 20px;
-  font-style: italic;
-  color: rgba(245, 234, 214, 0.7);
-  max-width: 620px;
-  margin: 0 auto 28px auto;
-  line-height: 1.8;
-  margin-bottom: 50px;
-">
-  Across the two most recent sets; <em style="color: #f97316; font-style: normal;">Unleashed</em> and  
-  <em style="color: #e8b84b; font-style: normal;">Spiritforged</em>, Riftbound's metagame has trended toward greater archetype 
-  diversity, moving away from few dominating legends and archetypes to 
-  a more evenly distributed competitive landscape. 
-</p>
+    text-align:center; font-size:20px; font-style:italic;
+    color:rgba(245,234,214,0.7); max-width:620px;
+    margin:0 auto 28px auto; line-height:1.8; margin-bottom:50px;
+  ">
+    Across the two most recent sets; <em style="color:#f97316;font-style:normal;">Unleashed</em> and
+    <em style="color:#e8b84b;font-style:normal;">Spiritforged</em>, Riftbound's metagame has trended toward greater archetype
+    diversity, moving away from few dominating legends and archetypes to
+    a more evenly distributed competitive landscape.
+  </p>
 
-
-  <!-- Chart 1  -->
   <div class="chart-block reveal">
     <div class="chart-title-row">
       <span class="chart-meta">Click buttons to toggle</span>
     </div>
-  
-    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-      <button class="meta-tog-btn" data-mode="flat" style="border-color:#e8b84b; color:#e8b84b;">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="meta-tog-btn" data-mode="flat" style="border-color:#e8b84b;color:#e8b84b;">
         <span class="meta-btn-swatch dashed" style="color:#e8b84b;"></span>Ideal Meta Share
       </button>
-
-      <button class="meta-tog-btn" data-mode="dummy" style="border-color:#c2441a; color:#c2441a;">
+      <button class="meta-tog-btn" data-mode="dummy" style="border-color:#c2441a;color:#c2441a;">
         <span class="meta-btn-swatch" style="background:#c2441a;"></span>SPIRITFORGED Meta Share
       </button>
-
-      <button class="meta-tog-btn active" data-mode="real" style="border-color:#17b5ff; color:#17b5ff">
+      <button class="meta-tog-btn active" data-mode="real" style="border-color:#17b5ff;color:#17b5ff;">
         <span class="meta-btn-swatch" style="background:#17b5ff;"></span>UNLEASHED Meta Share (current)
       </button>
-
-      <button class="meta-tog-btn" data-mode="all" style="border-color:#ffffff44; color:#f5ead6;">
+      <button class="meta-tog-btn" data-mode="all" style="border-color:#ffffff44;color:#f5ead6;">
         <span class="meta-btn-swatch" style="background:#f5ead6;"></span>All
       </button>
-      
-
     </div>
-  
-    <div class="chart-wrap" style="height: 500px;"><canvas id="metaShareChart"></canvas></div>
+    <div class="chart-wrap" style="height:500px;"><canvas id="metaShareChart"></canvas></div>
   </div>
-
-</div>
-
 
 </section>
 
@@ -122,12 +89,12 @@
 <section class="section">
   <div class="section-label reveal">Tournament Circuit</div>
   <h2 class="reveal">Regional Qualifier <em>Standings</em></h2>
-    <p class="reveal">Comparing all Regional Qualifier tournaments across the world, the Regional Qualifiers featuring Unleashed have been 
-      spread with greater legend diversity
-    </p>
+  <p class="reveal">Comparing all <em>Regional Qualifier</em> tournaments that have taken place across the world, the <em>Regional Qualifier</em> featuring <em style="color:#f97316;font-style:normal;">Unleashed</em> have proved
+    to have greater legend diversity in comparison to previous sets. See the map visualisation for more information:
+  </p>
 
-  <div class="chart-block reveal" style="padding: 0; overflow: hidden;">
-    <div style="display:flex; align-items:center; gap:14px; padding:12px 16px; background:rgba(26,16,8,0.97); border-bottom:1px solid rgba(232,184,75,0.2);">
+  <div class="chart-block reveal" style="padding:0;overflow:hidden;">
+    <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:rgba(26,16,8,0.97);border-bottom:1px solid rgba(232,184,75,0.2);">
       <label for="region-select" style="font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#8a7055;">Region</label>
       <select id="region-select" style="appearance:none;background:rgba(21,13,39,0.9);border:1px solid rgba(232,184,75,0.25);color:#f5ead6;font-family:'Space Mono',monospace;font-size:11px;padding:6px 30px 6px 11px;cursor:pointer;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 5 5-5' stroke='%23e8b84b' stroke-width='1.3' fill='none'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 9px center;">
         <option value="">— Select a region —</option>
@@ -137,7 +104,7 @@
       </select>
       <span id="region-desc" style="font-size:20px;color:#8a7055;margin-left:4px;"></span>
     </div>
-    <div style="display:flex; min-height:560px;">
+    <div style="display:flex;min-height:560px;">
       <div id="map-wrap" style="flex:1;position:relative;overflow:hidden;background:#08050f;">
         <div id="no-region" style="display:flex;align-items:center;justify-content:center;height:560px;">
           <p style="font-size:20px;letter-spacing:0.2em;color:#8a7055;text-transform:uppercase;">Select a region above</p>
@@ -152,103 +119,50 @@
       </div>
     </div>
   </div>
-
 </section>
 
 <div class="divider reveal"><hr class="divider-line"><span class="divider-ornament">✦</span></div>
 
 <section>
+  <div class="section-label reveal" style="text-align:center;justify-content:center;">A problem in Unleashed Meta</div>
+  <h2 class="reveal" style="text-align:center;">Lying Beneath this Legend Diversity...</h2>
+  <p class="section-body">At first glance, Riftbound's early competitive landscape appears remarkably healthy, with a broad spread of legends represented
+    across tournaments and ranked play. However, beneath this promising veneer of legend diversity lies a metagame heavily shaped by a single colour archetype:
+    Body Rune (Orange) decks. While no individual legend has emerged as overwhelmingly dominant, Orange decks have become essential in meta play, and they all share the same trend...</p>
 
-  <!-- A Meta Divided By Colour -->
-  <div class="story-block reveal">
-    <div class="story-text">
-      <p class="section-tag">A Meta divided by Colour</p>
-      <h2 class="section-heading">Lying beneath legend diversity...</h2>
-      <p class="section-body">At first glance, Riftbound's early competitive landscape appears remarkably healthy, with a broad spread of legends represented 
-        across tournaments and ranked play. However, beneath this promising veneer of legend diversity lies a metagame heavily shaped by a single colour archetype: 
-        Body Rune (Orange) decks. While no individual legend has emerged as overwhelmingly dominant, Orange decks have become essential in meta play, with 38% of decks 
-      running Orange. But why is this the case? </p>
-      <br>
+  <div class="rb-wrap">
+    <div class="rb-eyebrow">Unleashed Meta · Deck Cost Analysis</div>
+    <div class="rb-title">Price vs. Popularity</div>
+    <div class="rb-sub">Average deck cost for top-played legends in the current Unleashed meta. Hover for deck count.</div>
+    <div class="rb-legend">
+      <span><b style="background:#f97316;"></b>Avg deck price (USD)</span>
     </div>
-    <div class="stat-visual reveal rd2">
-      <div class="big-stat">38%</div>
-      <div class="big-stat-label">Orange Deck Meta Share</div>
-      <div class="wr-list" id="meta-bars"></div>
+    <div style="position:relative;width:100%;height:280px;">
+      <canvas id="rbChart" role="img" aria-label="Horizontal bar chart showing average deck price for top Unleashed meta legends."></canvas>
     </div>
-  </div> 
-
-  <div class="bar-chart reveal">
-    <div class="bar-row">
-      <div class="bar-label">body/chaos</div>
-      <div class="bar-track"><div class="bar-fill calm" style="width:0%" data-width="75%"></div></div>
-      <div class="bar-value">12</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">body/chaos</div>
-      <div class="bar-track"><div class="bar-fill chaos" style="width:0%" data-width="68%"></div></div>
-      <div class="bar-value">11</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">chaos/mind</div>
-      <div class="bar-track"><div class="bar-fill mind" style="width:0%" data-width="50%"></div></div>
-      <div class="bar-value">8</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">body/order</div>
-      <div class="bar-track"><div class="bar-fill body" style="width:0%" data-width="44%"></div></div>
-      <div class="bar-value">7</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">mind/order</div>
-      <div class="bar-track"><div class="bar-fill order" style="width:0%" data-width="31%"></div></div>
-      <div class="bar-value">5</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">body/calm</div>
-      <div class="bar-track"><div class="bar-fill calm" style="width:0%" data-width="37%"></div></div>
-      <div class="bar-value">6</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">calm/order</div>
-      <div class="bar-track"><div class="bar-fill order" style="width:0%" data-width="25%"></div></div>
-      <div class="bar-value">4</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">chaos/fury</div>
-      <div class="bar-track"><div class="bar-fill fury" style="width:0%" data-width="19%"></div></div>
-      <div class="bar-value">3</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">calm/mind</div>
-      <div class="bar-track"><div class="bar-fill calm" style="width:0%" data-width="12%"></div></div>
-      <div class="bar-value">2</div>
+    <div style="margin-top:14px;font-size:12px;color:rgba(245,234,214,0.3);letter-spacing:0.08em;text-align:right;">
+      Source: Unleashed set meta data
     </div>
   </div>
-
 </section>
 
-  <div class="pullquote reveal">
-  <p class="pullquote-text" style="text-align: center";> Why are Orange decks an <em>issue?</em></p>
+<div class="pullquote reveal">
+  <p class="pullquote-text" style="text-align:center;">But why are these top Orange decks <em>so expensive?</em> What makes them so popular in the Meta?</p>
 </div>
-
 
 <div class="divider reveal"><hr class="divider-line"><span class="divider-ornament">✦</span></div>
 
+<!-- DECK IN FOCUS -->
 <section class="section">
   <div class="section-label reveal">Deck in Focus</div>
   <h2 class="reveal">The Rising Demand of <em>Dazzling Aurora</em></h2>
 
-  <!-- <p class="reveal">Dazzling Aurora has been a deck archetype since Origins; Riftbound's first ever set, offering a unique and powerful effect where you can play expensive units ignoring its costs. In theory, the card is designed with a 
-    natural counterbalance, costing 9 energy and 2 power, taking considerable time and resources before it can be played. Although it may pose great threat once active, it is not overwhelmingly difficult to beat, and can be effectively answered with the correct play.
-  </p> -->
-
-  <!-- AURORA CARD -->
   <div class="hero-right">
     <div class="card-scene">
       <div class="card-3d" id="auroraCard">
         <div class="card-face card-front">
           <img src="https://thecardhubaustralia.com.au/cdn/shop/files/652946_1000x1000.jpg?v=1761827980" alt="Aurora Card"
-            style="width: 100%; height: 100%; object-fit: contain; border-radius: 14px;">
+            style="width:100%;height:100%;object-fit:contain;border-radius:14px;">
           <div class="card-shine"></div>
         </div>
         <div class="card-face card-back">
@@ -261,53 +175,48 @@
         </div>
       </div>
     </div>
-    <p class="card-caption" style="padding: 20px 0;">Click to zoom.</p>
+    <p class="card-caption" style="padding:20px 0;">Click to zoom.</p>
   </div>
 
   <div class="aurora-spotlight reveal">
     <div class="aurora-title">Dazzling Aurora</div>
     <div class="aurora-cost">9 Energy 2 Power · Gear</div>
     <div class="aurora-text">
-      Dazzling Aurora has been a deck archetype since Origins; Riftbound's first ever set, offering a unique and powerful effect where you can play expensive units ignoring its costs. In theory, the card is designed with a 
-    natural counterbalance, costing 9 energy and 2 power, taking considerable time and resources before it can be played. Although it may pose great threat once active, it is not overwhelmingly difficult to beat, and can be 
-    effectively answered with the correct play.
+      Dazzling Aurora has been a deck archetype since Origins; Riftbound's first ever set, offering a unique and powerful effect where you can play expensive units ignoring its costs. In theory, the card is designed with a
+      natural counterbalance, costing 9 energy and 2 power, taking considerable time and resources before it can be played. Although it may pose great threat once active, it is not overwhelmingly difficult to beat, and can be
+      effectively answered with the correct play.
     </div>
   </div>
 
-  <!-- <p class="paragraph-subtitle">The Rising Demand of Dazzling Aurora</p> -->
-
-  <!-- CHART: Aurora Demand -->
   <div class="chart-block reveal">
     <div class="chart-title-row">
       <h3>Dazzling Aurora Price & Demand History</h3>
       <span class="chart-meta">Market price and items sold per 3-day period (TCGplayer, Feb–May 2026)</span>
-  
-      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
         <button class="demand-tog-btn" data-period="before"
-          style="appearance:none; background:rgba(21,13,39,0.9); border:1px solid #e8b84b; color:#e8b84b; font-family:'Space Mono',monospace; font-size:11px; padding:5px 12px; cursor:pointer; letter-spacing:0.05em;">
+          style="appearance:none;background:rgba(21,13,39,0.9);border:1px solid #e8b84b;color:#e8b84b;font-family:'Space Mono',monospace;font-size:11px;padding:5px 12px;cursor:pointer;letter-spacing:0.05em;">
           — Before Unleashed Preview
         </button>
         <button class="demand-tog-btn active" data-period="after"
-          style="appearance:none; background:rgba(21,13,39,0.9); border:1px solid #f97316; color:#f97316; font-family:'Space Mono',monospace; font-size:11px; padding:5px 12px; cursor:pointer; letter-spacing:0.05em;">
+          style="appearance:none;background:rgba(21,13,39,0.9);border:1px solid #f97316;color:#f97316;font-family:'Space Mono',monospace;font-size:11px;padding:5px 12px;cursor:pointer;letter-spacing:0.05em;">
           — After Unleashed Preview
         </button>
       </div>
-
     </div>
     <div class="chart-wrap"><canvas id="demandChart"></canvas></div>
   </div>
 
   <div class="pullquote reveal">
-    <p class="pullquote-text" style="text-align: center";>The issue <em>isn't</em> with Dazzling Aurora <em>itself</em>, but with...</p>
+    <p class="pullquote-text" style="text-align:center;"><em>Dazzling Aurora</em> only soared in price once <em>Elder Dragon</em> was previewed in the new set of <em>Unleashed</em></p>
   </div>
 
   <!-- ELDER DRAGON CARD -->
-  <div class="hero-right">
-    <div class="card-scene">
+  <div style="position:relative;width:100%;display:flex;justify-content:center;align-items:center;">
+    <div class="card-scene" style="flex-shrink:0;">
       <div class="card-3d" id="elderDragonCard">
         <div class="card-face card-front">
           <img src="https://static.dotgg.gg/riftbound/cards/UNL-118A.webp" alt="Elder Dragon Card"
-            style="width: 100%; height: 100%; object-fit: contain; border-radius: 14px;">
+            style="width:100%;height:100%;object-fit:contain;border-radius:14px;">
           <div class="card-shine"></div>
         </div>
         <div class="card-face card-back">
@@ -320,31 +229,45 @@
         </div>
       </div>
     </div>
-    <p class="card-caption" style="padding: 20px 0;">Click to zoom.</p>
+
+    <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible;"
+      viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet">
+      <line x1="299" y1="91" x2="90" y2="180" stroke="rgba(251,146,60,0.55)" stroke-width="1.2" stroke-dasharray="5 3"/>
+      <circle cx="299" cy="91" r="4" fill="#fb923c"/>
+      <text x="85" y="168" text-anchor="end" font-family="Space Mono, monospace" font-size="16" letter-spacing="2" fill="#fb923c">RUNE COST</text>
+      <text x="85" y="196" text-anchor="end" font-family="Crimson Pro, Georgia, serif" font-size="24" fill="rgba(245,234,214,0.7)">With Dazzling Aurora active,</text>
+      <text x="85" y="224" text-anchor="end" font-family="Crimson Pro, Georgia, serif" font-size="24" fill="rgba(245,234,214,0.7)">unit costs are ignored:</text>
+      <text x="85" y="252" text-anchor="end" font-family="Crimson Pro, Georgia, serif" font-size="24" fill="rgba(245,234,214,0.7)">play big units for free.</text>
+
+      <line x1="511" y1="91" x2="690" y2="140" stroke="rgba(232,184,75,0.55)" stroke-width="1.2" stroke-dasharray="5 3"/>
+      <circle cx="511" cy="91" r="4" fill="#e8b84b"/>
+      <text x="695" y="130" text-anchor="start" font-family="Space Mono, monospace" font-size="16" letter-spacing="2" fill="#e8b84b">HEALTH · 10</text>
+      <text x="695" y="158" text-anchor="start" font-family="Crimson Pro, Georgia, serif" font-size="24" fill="rgba(245,234,214,0.7)">A very mighty unit with</text>
+      <text x="695" y="186" text-anchor="start" font-family="Crimson Pro, Georgia, serif" font-size="24" fill="rgba(245,234,214,0.7)">great attack triggers.</text>
+
+      <line x1="511" y1="340" x2="690" y2="310" stroke="rgba(232,184,75,0.55)" stroke-width="1.2" stroke-dasharray="5 3"/>
+      <circle cx="511" cy="340" r="4" fill="#e8b84b"/>
+      <text x="695" y="290" text-anchor="start" font-family="Space Mono, monospace" font-size="16" letter-spacing="2" fill="#e8b84b">ON PLAY EFFECT</text>
+      <text x="695" y="318" text-anchor="start" font-family="Crimson Pro, Georgia, serif" font-size="24" fill="rgba(245,234,214,0.7)">Deals 1 damage to an enemy</text>
+      <text x="695" y="346" text-anchor="start" font-family="Crimson Pro, Georgia, serif" font-size="24" fill="rgba(245,234,214,0.7)">unit at each location:</text>
+      <text x="695" y="374" text-anchor="start" font-family="Crimson Pro, Georgia, serif" font-size="24" fill="rgba(245,234,214,0.7)">that 1 damage kills outright.</text>
+    </svg>
   </div>
+
+  <p class="card-caption" style="padding:20px 0;text-align:center;">Click to zoom.</p>
 
   <p class="paragraph-subtitle">The Power Inequality of Aurora paired with <em>Elder Dragon</em></p>
+  <p class="reveal">For just <strong>9 energy and 2 power</strong>, Aurora enables a player to get a costly unit like <strong>Elder Dragon</strong>, which would normally require
+    far more investment into play reliably and repeatedly. In a format where power ceilings are high and games end quickly, cheating massive high cost units makes it increasingly
+    difficult to win the game against such players using this deck archetype.</p>
 
-  <p class="reveal">For just <strong>9 energy and 2 power</strong>, Aurora enables a player to get a costly unit like <strong>Elder Dragon</strong>, which would normally require far more investment into play reliably and repeatedly. In a format where power ceilings are high and games end quickly, cheating massive high cost units makes it increasingly difficult to win the game against such players using this deck archetype.</p>
-
-  <!-- CHART: Unit cheat frequency -->
-  <div class="chart-block reveal">
-    <div class="chart-title-row">
-      <h3>Units Cheated Into Play via Aurora — RQ Sydney</h3>
-      <span class="chart-meta">Recorded across all observed Dazzling Aurora games</span>
-    </div>
-    <div class="chart-wrap chart-wrap-tall"><canvas id="unitCheatChart"></canvas></div>
-  </div>
-
-  <!-- CHART: Aurora vs No Aurora -->
   <div class="chart-block reveal">
     <div class="chart-title-row">
       <h3>Aurora-Run Decks vs Non-Aurora Body Rune Decks</h3>
-      <span class="chart-meta">Average placement, win rate, and top-8 conversion</span>
+      <span class="chart-meta">Source: riftdecks.com</span>
     </div>
     <div class="chart-wrap"><canvas id="auroraCompareChart"></canvas></div>
   </div>
-
 </section>
 
 <div class="divider reveal"><hr class="divider-line"><span class="divider-ornament">✦</span></div>
@@ -353,34 +276,74 @@
 <section class="section">
   <div class="section-label reveal">Chapter 03</div>
   <h2 class="reveal">The Legend Is Almost <em>Irrelevant</em></h2>
-  <p class="reveal">In a healthy metagame, the Legend defines the deck. At RQ Sydney, Body Rune decks tell a very different story; Khazix, Rengar, and Poppy share almost nothing in kit design, yet their decklists converge on the same Aurora-powered core.</p>
+  <p class="reveal" style="margin-bottom:100px;">In a healthy metagame, the Legend defines the deck. At RQ Sydney, Body Rune decks tell a very different story — Khazix, Rengar, and Poppy share almost nothing in kit design, yet their decklists converge on the same Aurora-powered core.</p>
 
-  <div class="legend-grid">
-    <div class="legend-card featured reveal reveal-delay-1">
-      <div class="legend-name">Khazix</div>
-      <div class="legend-count">Best finish: x</div>
-      <div class="legend-best">14-1-1 record at the top</div>
-    </div>
+  <h2 class="reveal" style="text-align:center;margin-bottom:50px;">Top RQ Sydney Decks</h2>
+
+  <div class="legend-grid reveal">
     <div class="legend-card featured reveal reveal-delay-2">
       <div class="legend-name">Rengar</div>
-      <div class="legend-count">Best finish: x</div>
-      <div class="legend-best">12-2-1 record at the top</div>
+      <div class="deck-meta-row">
+        <span class="deck-rune-pill" style="display:block;text-align:center;">Placed #11 at RQ Sydney</span>
+        <span class="deck-rune-pill" style="display:block;text-align:center;margin-bottom:14px;"><em>Best of Rengar</em></span>
+      </div>
+      <div class="deck-image-wrap">
+        <img src="best-of-sydney---dragons.webp" alt="Rengar decklist RQ Sydney" class="deck-image">
+        <div class="deck-image-fade"></div>
+      </div>
     </div>
-    <div class="legend-card featured reveal-delay-3">
+
+    <div class="legend-card featured reveal reveal-delay-3">
       <div class="legend-name">Poppy</div>
-      <div class="legend-count">Best finish: xx</div>
-      <div class="legend-best">11-2-0 at peak</div>
+      <div class="deck-meta-row">
+        <span class="deck-rune-pill" style="display:block;text-align:center;">Placed #21 at RQ Sydney</span>
+        <span class="deck-rune-pill" style="display:block;text-align:center;margin-bottom:14px;"><em>Best of Poppy</em></span>
+      </div>
+      <div class="deck-image-wrap">
+        <img src="aurora-dragon-vanguard-poppeh.webp" alt="Poppy decklist RQ Sydney" class="deck-image">
+        <div class="deck-image-fade"></div>
+      </div>
+    </div>
+
+    <div class="legend-card featured reveal reveal-delay-1">
+      <div class="legend-name">Kha'Zix</div>
+      <div class="deck-meta-row">
+        <span class="deck-rune-pill" style="display:block;text-align:center;">Placed #28 at RQ Sydney</span>
+        <span class="deck-rune-pill" style="display:block;text-align:center;margin-bottom:14px;"><em>Best of Khazix</em></span>
+      </div>
+      <div class="deck-image-wrap">
+        <img src="rq-sydney-best-of-khazix---ppoong-28.webp" alt="Khazix decklist RQ Sydney" class="deck-image">
+        <div class="deck-image-fade"></div>
+      </div>
     </div>
   </div>
 
-  <!-- <ul class="reveal" style="color: rgba(245,234,214,0.85); font-size: 18px; line-height: 1.8; padding-left: 24px; margin-bottom: 20px;">
-    <li>Aurora needs to be banned because it prevents Riot from adding big, high-cost units in the future; they can simply be cheated into play, making any new powerful unit an instant Aurora target.</li>
-    <li>Aurora devalues deck and legend agency, homogenising orange decks into playing the same way regardless of the legend chosen.</li>
-    <li>It is unfair that legends in the orange rune are stripped of their character; they are optimally played around Aurora rather than their own unique kit.</li>
-    <li>For example, Kha'Zix's legend ability benefits from using XP, yet the best-performing Kha'Zix deck at Sydney cut XP entirely in favour of the Aurora package.</li>
-  </ul> -->
+  <div class="aurora-shared-callout reveal">
+    <div class="asc-label">The Shared Core — across all 3 legends</div>
+    <div class="asc-cards">
+      <div class="asc-card highlight-aurora">
+        <span class="asc-qty">3×</span>
+        <span class="asc-name">Dazzling Aurora</span>
+        <span class="asc-note">The engine</span>
+      </div>
+      <div class="asc-card highlight-elder">
+        <span class="asc-qty">3×</span>
+        <span class="asc-name">Elder Dragon</span>
+        <span class="asc-note">The payoff</span>
+      </div>
+      <div class="asc-card">
+        <span class="asc-qty">3×</span>
+        <span class="asc-name">Catalyst of Aeons</span>
+        <span class="asc-note">Ramp</span>
+      </div>
+      <div class="asc-card">
+        <span class="asc-qty">3×</span>
+        <span class="asc-name">Mobilize</span>
+        <span class="asc-note">Ramp</span>
+      </div>
+    </div>
+  </div>
 
-  <!-- CHART: Legend Ability Activations -->
   <div class="chart-block reveal">
     <div class="chart-title-row">
       <h3>Legend Ability Activations per Game</h3>
@@ -389,21 +352,8 @@
     <div class="chart-wrap"><canvas id="legendAbilityChart"></canvas></div>
   </div>
 
-  
-
-  <!-- CHART: Radar
-  <div class="chart-block reveal">
-    <div class="chart-title-row">
-      <h3>Archetype Performance Radar</h3>
-      <span class="chart-meta">Calm/chaos vs Body/chaos vs Chaos/mind across 5 key metrics</span>
-    </div>
-    <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
-  </div>
-
-  <p class="reveal">Notice what these decks share: <strong>the Body rune, and Aurora.</strong> Irelia, Vex, and Master Yi are wildly different legends — yet their tournament decklists converge on the same core package. This is the clearest sign of a problematic card: when players choose it <em>despite</em> their legend, not <em>because</em> of it.</p> -->
-  <p class="reveal">Notice how Orange decks rarely use their legend abilities compared to other runes? This is a real issue happening in this current 
-    Unleashed Meta, diminishing the legends abilties and abusing the Body Rune's ability to playing around a single shared archetype: <strong>Dazzling Aurora</strong>
-  </p>
+  <p class="reveal">Notice how Orange decks rarely use their legend abilities compared to other runes? This is a real issue in the current Unleashed Meta, diminishing legend identity and reducing the entire Body Rune to a single shared archetype built around <strong>Dazzling Aurora</strong>.
+  This archetype is homogenising these orange decks, defeating the purpose of what legends do.</p>
 </section>
 
 <div class="pullquote reveal">
@@ -411,74 +361,6 @@
 </div>
 
 <div class="divider reveal"><hr class="divider-line"><span class="divider-ornament">✦</span></div>
-
-<!-- CHAPTER 04
-<section class="section">
-  <div class="section-label reveal">Unleashed Meta</div>
-  <h2 class="reveal">Archetype Breakdown — <em>Full Field</em></h2>
-  <p class="reveal">Across all 64 top-finishing decks at RQ Sydney, the rune distribution shows just how dominant the Body Chaos pairing has become:</p>
-
-CHART: Round by round  
-  <div class="chart-block reveal">
-    <div class="chart-title-row">
-      <h3>Round-by-Round Win Accumulation</h3>
-      <span class="chart-meta">Cumulative avg wins: Body/Chaos vs all other archetypes combined</span>
-    </div>
-    <div class="chart-wrap"><canvas id="roundProgressChart"></canvas></div>
-  </div>
-
-  <p class="reveal"><strong>Body/Chaos is the single most-played archetype</strong>. The Body rune appears in <span class="highlight">24 of 64 decks (37.5%)</span>. No other single rune comes close.</p>
-</section>
-
-<div class="divider reveal"><hr class="divider-line"><span class="divider-ornament">✦</span></div> -->
-
-<!-- CHAPTER 05  
-<section class="section">
-  <div class="section-label reveal">Riftbound: Unleashed</div>
-  <h2 class="reveal">Almost every Body Rune deck <em>Runs Aurora</em></h2>
-  <p class="reveal">The data is unambiguous. If you want to play a Calm-rune deck and maximise your chances of winning, the top finishes belong overwhelmingly to the <strong>Calmchaos</strong> archetype — built around Aurora's high-roll potential with Elder Dragon.</p>
-
-  <div class="table-wrap reveal">
-    <table>
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Record</th>
-          <th>Legend</th>
-          <th>Player</th>
-          <th>Archetype</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td><span class="rank-badge rank-1">1st</span></td><td>14-1-1</td><td>Irelia Blade Dancer</td><td>EDG Rico1997</td><td><span class="arch-tag tag-calmchaos">calmchaos</span></td><td>$140</td></tr>
-        <tr><td><span class="rank-badge rank-top5">4th</span></td><td>12-2-1</td><td>Vex Gloomist</td><td>EEP Bonk Repeat</td><td><span class="arch-tag tag-calmchaos">calmchaos</span></td><td>$62</td></tr>
-        <tr><td><span class="rank-badge rank-top5">5th</span></td><td>11-2-1</td><td>Irelia Blade Dancer</td><td>Ghosterdriver</td><td><span class="arch-tag tag-calmchaos">calmchaos</span></td><td>$159</td></tr>
-        <tr><td><span class="rank-badge rank-other">12th</span></td><td>11-2-0</td><td>Master Yi</td><td>Minjuu</td><td><span class="arch-tag tag-bodycalm">bodycalm</span></td><td>$193</td></tr>
-        <tr><td><span class="rank-badge rank-other">16th</span></td><td>10-2-1</td><td>Vex Gloomist</td><td>Bolun Zhang</td><td><span class="arch-tag tag-calmchaos">calmchaos</span></td><td>$115</td></tr>
-        <tr><td><span class="rank-badge rank-other">22nd</span></td><td>10-3-0</td><td>Vex Gloomist</td><td>MaverickJack</td><td><span class="arch-tag tag-calmchaos">calmchaos</span></td><td>$135</td></tr>
-        <tr><td><span class="rank-badge rank-other">25th</span></td><td>10-3-0</td><td>Azir</td><td>yellow castor</td><td><span class="arch-tag tag-calmorder">calmorder</span></td><td>$82</td></tr>
-        <tr><td><span class="rank-badge rank-other">27th</span></td><td>10-3-0</td><td>Vex Gloomist</td><td>TSS KnightinGale</td><td><span class="arch-tag tag-calmchaos">calmchaos</span></td><td>$114</td></tr>
-        <tr><td><span class="rank-badge rank-other">33rd</span></td><td>10-3-0</td><td>Lillia</td><td>Duncan</td><td><span class="arch-tag tag-calmmind">calmmind</span></td><td>$263</td></tr>
-        <tr><td><span class="rank-badge rank-other">39th</span></td><td>10-3-0</td><td>Irelia Blade Dancer</td><td>Wugtrio</td><td><span class="arch-tag tag-calmchaos">calmchaos</span></td><td>$130</td></tr>
-        <tr><td><span class="rank-badge rank-other">50th</span></td><td>9-3-1</td><td>Irelia Blade Dancer</td><td>KKayn</td><td><span class="arch-tag tag-calmchaos">calmchaos</span></td><td>$189</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-CHART: Price vs Placement
-  <div class="chart-block reveal">
-    <div class="chart-title-row">
-      <h3>Deck Price vs Final Placement</h3>
-      <span class="chart-meta">Does money win? Aurora decks cluster in the top regardless of cost.</span>
-    </div>
-    <div class="chart-wrap chart-wrap-tall"><canvas id="priceScatterChart"></canvas></div>
-  </div>
-
-  <p class="reveal">Of the top calm finishes, <strong>8 of the top 11 are Calmchaos</strong>. The two non-Calmchaos calm decks still share Aurora access — just running a different secondary rune alongside the orange package.</p>
-</section>
-
-<div class="divider reveal"><hr class="divider-line"><span class="divider-ornament">✦</span></div> -->
 
 <!-- VERDICT -->
 <section class="section">
@@ -490,19 +372,43 @@ CHART: Price vs Placement
     <div class="verdict-text">"When a single card causes players to subordinate their legend choice, their deck identity, and their strategic diversity to its presence, it has crossed from powerful to problematic."</div>
   </div>
 
-  <!-- CHART: Ban Projection -->
-  <div class="chart-block reveal">
-    <div class="chart-title-row">
-      <h3>Projected Metagame Without Aurora</h3>
-      <span class="chart-meta">Estimated rune representation shift if Aurora were restricted or removed</span>
+  <div class="story-block reveal" style="display:flex;flex-direction:column;align-items:center;text-align:center;">
+    <div class="story-text" style="align-items:center;text-align:center;max-width:680px;">
+      <p class="section-tag" style="justify-content:center;">See It In Action</p>
+      <h2 class="section-heading">Watch Dazzling Aurora <em>Dominate</em></h2>
+      <p class="section-body" style="text-align:center;">
+        Watch the top 2 contenders from RQ Sydney face off for first place — and see exactly how the Aurora package plays out at the highest level of competition.
+      </p>
+      <!-- <a href="https://www.youtube.com/YOUR_LINK_HERE" target="_blank" rel="noopener noreferrer" class="cta-watch-btn">
+        <span class="cta-icon">▶</span>
+        Watch the Match
+      </a> -->
     </div>
-    <div class="chart-wrap"><canvas id="banProjectionChart"></canvas></div>
-  </div>
 
+    <div class="stat-visual reveal" style="width:100%;max-width:680px;margin-top:32px;padding:0;overflow:hidden;">
+      <a href="https://youtu.be/GM1oOGwvTQs?t=5377" target="_blank" rel="noopener noreferrer"
+         style="display:block;width:100%;position:relative;min-height:260px;">
+      <img src="https://img.youtube.com/vi/GM1oOGwvTQs/maxresdefault.jpg"
+          alt="RQ Sydney Grand Finals"
+          style="width:100%;height:100%;object-fit:cover;opacity:0.75;transition:opacity 0.3s;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <div style="
+            width:72px;height:72px;
+            background:rgba(249,115,22,0.9);
+            border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:28px;color:#fff;
+            border:2px solid rgba(232,184,75,0.6);
+          ">▶</div>
+        </div>
+      </a>
+    </div>
+  </div>
 </section>
 
 <footer>
-  <p>Data sourced from Riftdecks · Julianna Pham</p>
+  <div style="margin-bottom:0.7rem">✦ Riftbound Unleashed · Meta Report ✦</div>
+  <div>All data sourced from riftdecks and Piltover Archive</div>
 </footer>
 
 <script src="script.js"></script>
